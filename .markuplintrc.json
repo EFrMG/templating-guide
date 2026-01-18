@@ -1,0 +1,10 @@
+{
+  "nodeRules": [
+    {
+      "tagName": "abbr",
+      "rules": {
+        "required-attr": false
+      }
+    }
+  ]
+}

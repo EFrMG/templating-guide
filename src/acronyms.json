@@ -1,0 +1,86 @@
+[
+  {
+    "acronym": "HTML",
+    "definition": "HyperText Markup Language"
+  },
+  {
+    "acronym": "CSS",
+    "definition": "Cascading Style Sheets"
+  },
+  {
+    "acronym": "JS",
+    "definition": "JavaScript"
+  },
+  {
+    "acronym": "VPS",
+    "definition": "Virtual Private Server"
+  },
+  {
+    "acronym": "JAMstack",
+    "definition": "JavaScript, APIs and Markup stack"
+  },
+  {
+    "acronym": "UI",
+    "definition": "User Interface"
+  },
+  {
+    "acronym": "SSG",
+    "definition": "Static Site Generator"
+  },
+  {
+    "acronym": "CMS",
+    "definition": "Content Management System"
+  },
+  {
+    "acronym": "HBS",
+    "definition": "Handlebars"
+  },
+  {
+    "acronym": "JSON",
+    "definition": "JavaScript Object Notation"
+  },
+  {
+    "acronym": "URL",
+    "definition": "Uniform Resource Locator"
+  },
+  {
+    "acronym": "API",
+    "definition": "Application Programming Interface"
+  },
+  {
+    "acronym": "DRY",
+    "definition": "Don't Repeat Yourself"
+  },
+  {
+    "acronym": "YAML",
+    "definition": "YAML Ain't Markup Language"
+  },
+  {
+    "acronym": "SEO",
+    "definition": "Search Engine Optimization"
+  },
+  {
+    "acronym": "RSS",
+    "definition": "Really Simple Syndication"
+  },
+  {
+    "acronym": "HMR",
+    "definition": "Hot Module Replacement"
+  },
+  {
+    "acronym": "CTA",
+    "definition": "Call To Action"
+  },
+  {
+    "acronym": "NPM",
+    "definition": "Node Package Manager"
+  },
+  {
+    "acronym": "MD",
+    "definition": "Markdown"
+  },
+  {
+    "acronym": "XSS",
+    "definition": "Cross Site Scripting"
+  }
+]

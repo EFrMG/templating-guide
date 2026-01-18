@@ -1,0 +1,2364 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Erwin Francisco Macias Ghiglione" />
+    <meta
+      name="description"
+      content="Templating languages introduction and orientation."
+    />
+    <link rel="icon" type="image/svg+xml" href="/moustache.svg" />
+    <title>Guide to Handlebars and Nunjucks Templating</title>
+  </head>
+  <body>
+    <!-- Tippy.js sets an aria-describedby attr, an explicit title attr is not needed, nor strict requirement in HTML, hence the suppression of such warning at ".markuplintrc.json" -->
+    <div class="main-wrapper">
+      <div class="main-grid">
+        <div class="sidebar-button" aria-expanded="false">
+          <label for="hamburger-check" class="hamburger-check">
+            <input id="hamburger-check" type="checkbox" />
+            <svg viewBox="0 0 32 32">
+              <path
+                class="hamburger-line hamburger-line-top-bottom"
+                d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"
+              ></path>
+              <path class="hamburger-line" d="M7 16 27 16"></path>
+            </svg>
+          </label>
+        </div>
+        <aside class="sidebar" id="sidebar">
+          <h1>Handlebars &amp; Nunjucks</h1>
+
+          <hr class="first" />
+
+          <nav>
+            <ul class="platforms">
+              <li class="first"><a href="#introduction">Introduction</a></li>
+              <li class="platform">
+                <h2 class="platform-name">Ghost</h2>
+                <ul class="platform-docs">
+                  <li><a href="#getting-started">Getting Started</a></li>
+                  <li><a href="#expressions">Expressions</a></li>
+                  <li><a href="#contexts">Contexts</a></li>
+                  <li><a href="#helpers">Helpers</a></li>
+                  <li><a href="#data-helpers">Data Helpers</a></li>
+                  <li><a href="#functional-helpers">Functional Helpers</a></li>
+                  <li><a href="#more-functional">Greater Functionality</a></li>
+                  <li><a href="#utility-helpers">Utility Helpers</a></li>
+                  <li><a href="#custom-helpers">Custom Helpers?</a></li>
+                  <li><a href="#partials">Partials</a></li>
+                  <li><a href="#routing">Routing</a></li>
+                  <li><a href="#example">Complete Example</a></li>
+                </ul>
+              </li>
+              <li class="platform">
+                <h2 class="platform-name">Metalsmith</h2>
+                <ul class="platform-docs">
+                  <li><a href="#metalsmith-introduction">Introduction</a></li>
+                  <li>
+                    <a href="#metalsmith-project-structure"
+                      >Project Structure</a
+                    >
+                  </li>
+                  <li><a href="#metalsmith-setup">Setup</a></li>
+                  <li>
+                    <a href="#metalsmith-build-script">The Build Script</a>
+                  </li>
+                  <li>
+                    <a href="#metalsmith-running-the-build"
+                      >Running the Build</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#metalsmith-blog-example">Creating a Blog</a>
+                  </li>
+                  <li>
+                    <a href="#metalsmith-more-plugins">More Plugins</a>
+                  </li>
+                  <li>
+                    <a href="#metalsmith-custom-plugins">Custom Plugins</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="platform">
+                <h2 class="platform-name">Eleventy</h2>
+                <ul class="platform-docs">
+                  <li><a href="#eleventy-introduction">Introduction</a></li>
+                  <li>
+                    <a href="#eleventy-project-structure">Project Structure</a>
+                  </li>
+                  <li>
+                    <a href="#eleventy-building-a-blog">Building a Blog</a>
+                  </li>
+                  <li>
+                    <a href="#eleventy-nunjucks">Pivoting to Nunjucks</a>
+                  </li>
+                  <li>
+                    <a href="#eleventy-nunjucks-setup">Configuration & Setup</a>
+                  </li>
+                  <li>
+                    <a href="#eleventy-markdown-nunjucks"
+                      >Markdown + Nunjucks</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#eleventy-advanced-topics">Advanced Topics</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="platform">
+                <h2 class="platform-name">Next.js</h2>
+                <ul class="platform-docs">
+                  <li><a href="#nextjs-introduction">Introduction</a></li>
+                  <li><a href="#nextjs-setup">Setup &amp; Config</a></li>
+                  <li>
+                    <a href="#nextjs-environment">The Nunjucks Environment</a>
+                  </li>
+                  <li>
+                    <a href="#nextjs-home-page">Root Layout &amp; Home Page</a>
+                  </li>
+                  <li>
+                    <a href="#nextjs-static-page">Static Page (Products)</a>
+                  </li>
+                  <li><a href="#nextjs-cms-page">CMS Page (Articles)</a></li>
+                  <li>
+                    <a href="#nextjs-client-page">Client Page (Dashboard)</a>
+                  </li>
+                  <li><a href="#nextjs-running">Running the Project</a></li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </aside>
+        <main class="main-content" id="main-content">
+          <section id="introduction">
+            <h2 class="first">Welcome to the Templating Guide</h2>
+            <p>
+              We'll explore how to use Handlebars and Nunjucks in various
+              environments: Ghost, Metalsmith, Eleventy, and Next.js. This guide
+              covers how to create reusable templates, manage data and even
+              extend the functionality of these engines to fit specific needs.
+            </p>
+            <p>
+              It is quite a common occurrence in programming that one needs to
+              maintain a structure in code, while changing content found inside
+              it.
+            </p>
+            <p>
+              Imagine one has a recipe for a nice cake. A template is akin to
+              such a recipe: it possesses a structure and placeholders (exempli
+              gratia,
+              <em>add <span class="underscores-color">__</span> eggs,</em>
+              <em>bake for <span class="underscores-color">__</span> minutes</em
+              >).
+            </p>
+            <p>
+              A templating language, such as
+              <a href="https://handlebarsjs.com/" target="_blank">Handlebars</a
+              >, fulfills the <em>recipe</em> role for <abbr>HTML</abbr>. It
+              enables one to compose a base HTML structure and subsequently
+              inject dynamic data therein.
+            </p>
+            <p>
+              In other words, Handlebars functions as a <em>bridge</em>,
+              retrieving <span class="underscores-color">content</span> from
+              various sources (such as a database or
+              <code>.<abbr>md</abbr></code> files for blog posts) and
+              integrating it into the <abbr>HTML</abbr> structure.
+            </p>
+            <p>
+              Fundamentally, this process involves:
+              <em>setting</em>
+              <span class="underscores-color underline"> data</span
+              ><em> somewhere.</em>
+            </p>
+          </section>
+          <hr />
+          <section id="getting-started">
+            <h2>Templating with Ghost</h2>
+            <p>
+              One might consider using a <abbr>VPS</abbr> for self-hosting a
+              Ghost instance. However, it is also pertinent to note the
+              alternative of employing a <abbr>JAMstack</abbr> approach, for
+              which ample information and resources are available online,
+              specifically regarding Ghost.
+            </p>
+            <p>
+              The latter option, however, presents a challenge: many of Ghost's
+              inherent strengths (subscriptions, user content management, mail
+              forwarding for updates, post visit tracking; all managed via a
+              good <abbr>UI</abbr>) would necessitate integration from scratch,
+              or through separate third-party services if Ghost were to operate
+              headless with an <abbr>SSG</abbr>.
+            </p>
+            <p>
+              Should the reader require a general overview of
+              <abbr>SSG</abbr>s without the particularities of Ghost, please
+              navigate to the other platform sections via the sidebar. The
+              decision to commence with
+              <a href="https://docs.ghost.org/introduction">Ghost</a> stems from
+              its relative flexibility and comprehensive feature set concerning
+              custom Handlebars helpers, even if it could be considered
+              <em>bloated</em> for certain applications.
+            </p>
+            <p class="has-border-under">
+              The installation process will be omitted for brevity, just procure
+              the prerequisite programs, and correct version of
+              <a href="https://nodejs.org/">Node.js</a> of course. Do note that
+              building a Ghost instance does take a good amount of time; even to
+              start a development server is too lenghty a time for my liking.
+              There also is no <abbr>HMR</abbr>, having one to manually refresh
+              the page after file changes and rebuilds.
+            </p>
+            <p>
+              Templating proves ideal for a <abbr>CMS</abbr>
+              platform like
+              <a href="https://ghost.org/" target="_blank">Ghost</a>, where
+              content (posts, pages, and general
+              <span class="underscores-color">data</span>) is separate from the
+              overall design, yet requires periodic addition or modification.
+            </p>
+            <p>
+              A "Ghost theme" comprises a collection of
+              <code>.<abbr>hbs</abbr></code> files, which are essentially
+              <abbr>HTML</abbr> files, plus Handlebars expressions for Ghost's
+              particular implementation of the language.
+            </p>
+            <p>The most important files in a Ghost theme are:</p>
+            <ul class="moustache-list">
+              <li>
+                <code>index.hbs</code>: Fallback for
+                <code>{tag,author,default}.hbs</code>. Extends
+                <code>default.hbs</code>. If you lack one, Ghost will set one
+                regardless.
+              </li>
+              <li>
+                <code>default.hbs</code>: The main layout file. The frame for
+                the entire site (header, main, footer, etcetera). One
+                <em>could</em> just use <code>index.hbs</code> for this, as the
+                concept is similar.
+              </li>
+              <li>&nbsp;<code>post.hbs</code>: Displays a single post.</li>
+            </ul>
+          </section>
+          <hr />
+          <section id="expressions">
+            <h2>Basic Syntax: Expressions</h2>
+            <p>
+              Handlebars expressions are straightforward, encapsulated within
+              double curly braces: <code>{{expression}}</code>.
+            </p>
+            <p>
+              Ghost supplies the
+              <span class="underscores-color">data</span> while as Handlebars
+              renders it in the expression's place.
+            </p>
+            <p>
+              For instance, within the <code>post.hbs</code> file, one could
+              define a document title as follows:
+            </p>
+            <pre><code>&lt;title&gt;{{title}}&lt;/title&gt;</code></pre>
+            <p>
+              Upon a user's page view, Ghost will have replaced
+              <code>{{title}}</code> with the actual title of that post, as set
+              by an administrator of a Ghost instance for any particular post.
+            </p>
+          </section>
+          <hr />
+          <section id="contexts">
+            <h2>Understanding Contexts</h2>
+            <p>
+              The <span class="underscores-color">data</span> accessible to
+              Handlebars expressions varies depending on the page being viewed.
+              This phenomenon is termed "context." For example:
+            </p>
+            <ul class="moustache-list">
+              <li>
+                On a single post page (<code>post.hbs</code>), one has the
+                <code>post</code> <em>context</em>. This grants access to all
+                data pertinent to that specific post, such as
+                <code>{{title}}</code>, <code>{{content}}</code> and
+                <code>{{published_at}}</code>.
+              </li>
+              <li>
+                On the homepage (<code>index.hbs</code> or
+                <code>default.hbs</code>), one operates within the
+                <code>index</code> <em>context</em>. Here, individual post data
+                is not directly available; instead, a collection of all posts is
+                provided and could be looped through.
+              </li>
+            </ul>
+            <p>
+              A thorough understanding of <em>context</em> is paramount for
+              discerning which data works at which parts of the Ghost theme.
+              Sometimes, mostly with custom routing on complex themes, it could
+              get confusing or seem broken.
+            </p>
+          </section>
+          <hr />
+          <section id="helpers">
+            <h2>Ghost Helpers</h2>
+            <p>
+              Helpers are JavaScript functions embedded within templates. Their
+              primary purpose is to facilitate logical operations within a
+              logic-less templating language such as Handlebars.
+            </p>
+            <p>
+              Ghost provides several custom template types by default. May you
+              think of them like complex snippets evoked by simple keywords.
+            </p>
+            <p>
+              A non-exhaustive enumeration of these helpers begins in the next
+              section. The definition of custom helpers and/or altrernatives
+              will be addressed later.
+            </p>
+          </section>
+          <hr />
+          <section id="data-helpers">
+            <h2>Data Helpers</h2>
+            <p>
+              This category represents the most frequently employed helpers for
+              outputting content:
+            </p>
+            <ul class="moustache-list">
+              <li>&nbsp;<code>{{title}}</code>: Title of the post.</li>
+              <li>
+                <code>{{content}}</code>: Displays the complete content of the
+                post, often formatted within
+                <code>&lt;p&gt;&lt;/p&gt;</code> tags, thereby including
+                paragraph breaks on newlines. It could even include a
+                <abbr>CTA</abbr> to sign up or upgrade for determinate users if
+                configuration is set for users with restricted access.
+              </li>
+              <li>
+                <code>{{excerpt}}</code>: Provides a shortened version of the
+                post's content.
+              </li>
+              <li>
+                <code>{{author.name}}</code>: Outputs the name of the post's
+                author, corresponding to a Ghost user.
+              </li>
+              <li>
+                <code>{{tags}}</code>: Presents a literal list of tags
+                associated with the post, which may be iterated through.
+              </li>
+            </ul>
+          </section>
+          <hr />
+          <section id="functional-helpers">
+            <h2>Functional Helpers</h2>
+            <p>
+              Ghost additionally furnishes more advanced helpers, enabling
+              greater control over template logic.
+            </p>
+            <h3>The <code>{{#foreach}}</code> Helper</h3>
+            <p>
+              In the homepage, or wherever the post context is defined within
+              <code>routes.yaml</code>, one will most likely need to iterate
+              through the published posts. The <code>{{#foreach}}</code> helper
+              is ideal for this.
+            </p>
+            <pre><code>{{#foreach posts}}
+  &lt;article&gt;
+    &lt;h2&gt;{{title}}&lt;/h2&gt;
+    &lt;p&gt;{{excerpt}}&lt;/p&gt;
+    &lt;a href="{{url}}"&gt;Open post itself!&lt;/a&gt;
+  &lt;/article&gt;
+{{/foreach}}</code></pre>
+            <p>
+              It is important to note that the link to the post itself opens in
+              <code>post.hbs</code>.
+            </p>
+            <p>
+              Let us see a simple example of such a file, where the excerpt is
+              rather the full content, and there also is an image from the Ghost
+              admin panel.
+            </p>
+            <div class="filepath">
+              <code>post.hbs</code>
+            </div>
+            <pre class="has-filepath-above"><code>&lt;div&gt;
+  &lt;h1&gt;{{title}}&lt;/h1&gt;
+  &lt;p&gt;{{content}}&lt;/p&gt;
+  &lt;img src="{{img_url feature_image size="big" format="webp"}}" /&gt;
+&lt;/div&gt;</code></pre>
+            <h3>
+              The <code>{{#post}}</code> Helper for Accessing
+              <code>post</code> Context
+            </h3>
+            <p>
+              When operating within the <code>post</code> context on a dedicated
+              <code>post.hbs</code> page, one merely and practically requires
+              <code>{{content}}</code> to retrieve the post's content. The
+              <code>{{#post}}...{{/post}}</code> block is implicitly available
+              in this scenario.
+            </p>
+            <p>
+              However, note that the
+              <a
+                href="https://docs.ghost.org/themes/contexts/post"
+                target="_blank"
+                >documentation</a
+              >
+              uses the <code>{{#post}}</code> helper to make explicit that we
+              are "dropping into" such context.
+            </p>
+            <p>
+              The technically correct way to access this
+              <span class="underscores-color">data</span> would be to write:
+              <code>{{post.title}}</code>, <code>{{post.content}}</code>, etc.,
+              even if it works either way. I do suggest to follow the
+              documentation and access the <code>post</code> context within a
+              <code>{{#post}}...{{/post}}</code> block.
+            </p>
+            <pre><code>{{#post}}
+    {{!-- rest of ... --}}
+  &lt;p&gt;{{content}}&lt;/p&gt;
+    {{!-- ... the post --}}
+{{/post}}</code></pre>
+            <p>
+              Just as when at the <code>index</code> context we have a list of
+              posts to loop through with the use of the
+              <code>{{#foreach}}</code> helper, the <code>post</code> context
+              provides a more particular context.
+            </p>
+            <p>
+              What if we are on any other page, such as
+              <code>page.hbs</code> or similar?
+            </p>
+            <h3>The <code>{{#get}}</code> Helper</h3>
+            <p>
+              The <code>{{#get}}</code> helper is a more widely-encompassing
+              instrument for retrieving
+              <span class="underscores-color">data</span> not available in the
+              current context.
+            </p>
+            <p>
+              For example, one could fetch the three most recent posts
+              associated with a specific tag from any location within the theme
+              (any files).
+            </p>
+            <pre><code>{{#get "posts" filter="tags:specific-tag" limit="3"}}
+  {{#foreach posts}}
+      &lt;h2&gt;{{title}}&lt;/h2&gt;
+  {{/foreach}}
+{{/get}}</code></pre>
+            <h3>The <code>{{#if}}</code> Helper</h3>
+            <p>
+              The <code>{{#if}}</code> helper enables conditional rendering of
+              <abbr>HTML</abbr> blocks. This is particularly useful, for
+              instance, when verifying the existence of a feature image prior to
+              attempting its display.
+            </p>
+            <pre><code>{{#if feature_image}}
+  &lt;img src="{{img_url feature_image}}" alt="{{title}}"&gt;
+  {{else}}
+  {{!-- Do a barrel roll! (Z or R twice) --}}
+{{/if}}</code></pre>
+            <p>
+              <code>{{feature_image}}</code> is part of the
+              <span class="underscores-color">data</span> Ghost provides within
+              the <code>post</code> context.
+            </p>
+          </section>
+          <hr />
+          <section id="more-functional">
+            <h2>Adding Extra Functionality to Ghost</h2>
+
+            <p>
+              It is pertinent to acknowledge the potential limitations of Ghost
+              without the provision of custom fields for posts. While the
+              platform offers extensive customization and openness compared to
+              many counterparts, one is restricted to
+              <code>{{title}}</code>, <code>{{content}}</code>, and
+              <code>tags</code> for dynamic
+              <span class="underscores-color">data</span> assignment.
+            </p>
+            <p>
+              An alternative approach involves employing a script with its type
+              attribute set to "application/json", containing
+              <span class="underscores-color">data</span> fetched from the Ghost
+              admin via helpers. This data can then be parsed by a
+              <abbr>JS</abbr>
+              script to programmatically create elements and assign their
+              <code>textContent</code>, with organization facilitated by tags.
+              As previously mentioned, these posts accommodate two text inputs:
+              title and content.
+            </p>
+            <p>
+              Here, we construct a <abbr>JSON</abbr> array of objects for each
+              post having a specific tag, also incorporating all other tags for
+              extra <span class="underscores-color">data</span>:
+            </p>
+            <pre><code>{{!-- Fetch posts tagged as "custom" into a JSON array of objects --}}
+{{!-- Include their comma-separated tags for further use as well --}}
+{{#get "posts" filter="tag:custom" include="tags"}}
+  &lt;script type="application/json" id="post-data"&gt;
+    [
+      {{#foreach posts}}
+        {
+          "title": "{{title}}",
+          "content": "{{content}}",
+          "tags": [
+            {{#foreach tags}}
+                "{{slug}}"{{#unless @last}},{{/unless}}
+            {{/foreach}}
+          ]
+        }{{#unless @last}},{{/unless}}
+      {{/foreach}}
+    ]
+  &lt;/script&gt;
+{{/get}}</code></pre>
+            <p>
+              Observe how the <code>{{#unless}}</code> helper facilitates the
+              proper comma separation of each object, resulting in valid
+              <abbr>JSON</abbr>. The array of tags is delimited the same.
+            </p>
+            <p>
+              Regarding the <code>{{slug}}</code> helper, it is used to output a
+              <abbr>URL</abbr>-safe version of the tags. One could also use
+              <code>{{name}}</code> to retrieve the tag precisely as entered in
+              the Ghost admin panel irrespective of URL-friendliness, or even
+              <code>{{url}}</code>, which is even less suitable in this example.
+            </p>
+            <pre><code>const dataElement = document.getElementById("post-data");
+const postData = JSON.parse(dataElement.textContent);
+
+// Once the data is parsed, one can access postData.title, etc.
+postData.forEach((post) =&gt; {
+  const divElement = document.createElement("div");
+
+  // Ascertain if the post contains a specific tag.
+  const hasSpecificTag = post.tags.includes("specific-tag");
+
+  divElement.textContent = hasSpecificTag ? post.title : post.content;
+  document.body.appendChild(divElement);
+});</code></pre>
+            <p>
+              It is noteworthy that <code>tags</code> significantly contribute
+              to customization here.
+            </p>
+          </section>
+          <hr />
+          <section id="utility-helpers">
+            <h2>Utility Helpers</h2>
+            <p>This last type are very nice features!</p>
+            <ul class="moustache-list">
+              <li>
+                <code>{{asset "sub-dir/file.ext"}}</code>: A crucial one for
+                linking to the theme's <abbr>CSS</abbr>, <abbr>JS</abbr>, or any
+                other static asset, such as images within the
+                <code>assets/</code> directory, providing cache functionality.
+              </li>
+              <li>
+                <code>{{pagination}}</code>: Generates formatted
+                <abbr>HTML</abbr> for pagination links, which are customizable
+                in <code>pagination.hbs</code>. This implies one would limit the
+                ammount of posts shown per page and be within the
+                <code>post</code> context. It does not work using the
+                <code>{{#get}}</code> helper (in my experience).
+              </li>
+              <li>
+                <code>{{search}}</code>: Renders a functional, pre-styled
+                <strong>search</strong> button and its icon.
+              </li>
+            </ul>
+          </section>
+          <hr />
+          <section id="custom-helpers">
+            <h2>Custom Helpers: Are They Possible?</h2>
+            <p>These are not officially supported by Ghost.</p>
+            <p>
+              Should one genuinely require custom helpers, although more robust
+              (and safer) alternatives are presented shortly, one could either
+              modify Ghost's core files (which would get removed upon updating
+              Ghost) or implement a reverse proxy with middleware, as
+              <a
+                href="https://dev.to/piotrbednarski/make-custom-handlebar-helpers-in-ghost-48nh"
+                target="_blank"
+                >shown here</a
+              >.
+            </p>
+            <h3>Officially Supported Alternatives</h3>
+            <p>
+              It is entirely feasible to implement extra functionality without
+              registering new helpers:
+            </p>
+            <ul class="moustache-list">
+              <li>
+                One may leverage client-side JavaScript, as previously
+                <a href="#more-functional">illustrated</a>.
+              </li>
+              <li>
+                Another related option involves the
+                <a href="https://docs.ghost.org/content-api" target="_blank"
+                  >Content <abbr>API</abbr></a
+                >, the suitability of which is contingent upon the specific
+                requirements of one's application.
+              </li>
+            </ul>
+            <p>
+              For the majority of use cases, the built-in helpers suffice.
+              However, it is important to note that Handlebars' inherent
+              logic-less nature could be an issue. The second major section of
+              this website will pivot to Nunjucks to address this same
+              limitation.
+            </p>
+          </section>
+          <hr />
+          <section id="partials">
+            <h2>Structuring Themes with Partials</h2>
+            <p>
+              Partials are modular, reusable segments of a template. Their
+              utility lies in promoting the <abbr>DRY</abbr>
+              principle. For example, one could create a partial dedicated to
+              post meta-information (e.g., author, date, tags).
+            </p>
+            <p>
+              To implement, one could create a file within the
+              <code>partials/</code> directory
+              (<code>/partials/post-card.hbs</code>) and subsequently
+              incorporate it into another template using the following syntax:
+            </p>
+            <pre><code>{{&gt; "post-card"}}</code></pre>
+          </section>
+          <hr />
+          <section id="routing">
+            <h2>Routing and Layouts</h2>
+            <p>
+              In Ghost, the <code>default.hbs</code> file functions as the
+              primary template for one's site. It typically incorporates the
+              header, footer, and other elements common to all pages. The
+              <code>{{{body}}}</code> helper serves as a specialized placeholder
+              that instructs Ghost where to inject the content of the
+              <strong>current page</strong>.
+            </p>
+            <p>
+              For instance, when a user accesses a single post, Ghost will
+              render the
+              <code>post.hbs</code> template and embed its content into the
+              <code>{{{body}}}</code> of the <code>default.hbs</code> file. This
+              mechanism ensures a consistent layout across the entire site.
+            </p>
+            <p>
+              Ghost's routing system facilitates the creation of custom URLs and
+              their mapping to specific templates. This configuration is managed
+              within a
+              <code>routes.yaml</code> file, which can be uploaded via the Ghost
+              admin panel. As an example, one could establish a static page
+              featuring an "easter egg" by defining a custom route.
+            </p>
+            <div class="filepath"><code>routes.yaml</code></div>
+            <pre class="has-filepath-above"><code>routes:
+  /easter-egg/:
+    template: extra-page
+</code></pre>
+            <p>
+              This configuration directs Ghost to render the
+              <code>extra-page.hbs</code> template when a user navigates to the
+              <code>/easter-egg/</code> URL.
+            </p>
+            <div class="filepath"><code>extra-page.hbs</code></div>
+            <pre class="has-filepath-above"><code>{{!&lt; default}}
+
+&lt;div class="easter-egg"&gt;
+  &lt;p&gt;Here is the easter egg!&lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+            <p>
+              <code>{{!&lt; default}}</code> <em>sends</em> our page to
+              <code>default.hbs</code>, placing it at <code>{{{body}}}</code>.
+            </p>
+            <h3>One-off templates</h3>
+            <p>
+              One is able to create custom routing by adding the slug of a page
+              to a template file. This necessitates no actual routing in
+              <code>routes.yaml</code>. Some examples, including their
+              <abbr>URL</abbr> path:
+            </p>
+            <ul class="moustache-list">
+              <li>
+                <code>page-about.hbs</code>: Custom template for an
+                <code>about</code> page at <code>/about</code>.
+              </li>
+              <li>
+                <code>tag-news.hbs</code>: Custom template for a
+                <code>news</code> archival page at <code>/tag/news</code>.
+              </li>
+              <li>
+                <code>author-staff.hbs</code>: Custom template for a staff
+                member at <code>/author/staff</code>. This could be used to add
+                a special <abbr>UI</abbr> badge, for instance.
+              </li>
+            </ul>
+          </section>
+          <hr />
+          <section id="example">
+            <h2>Complete Example: A Feature-Rich Homepage</h2>
+            <p>
+              This section elucidates the integration of previous concepts. The
+              example will encompass partials for the header, footer and post
+              cards, leveraging built-in Ghost helpers to construct a
+              comprehensive layout.
+            </p>
+            <h3>Creating Partials within <code>partials/</code></h3>
+            <p>
+              Several partials will be created to maintain code organization and
+              reusability.
+            </p>
+            <div class="filepath"><code>partials/header.hbs</code></div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-handlebars">&lt;header class="site-header"&gt;
+  &lt;div class="site-header-content"&gt;
+    &lt;h1 class="site-title"&gt;{{@site.title}}&lt;/h1&gt;
+    &lt;p class="site-description"&gt;{{@site.description}}&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/header&gt;
+</code></pre>
+            <p>
+              Data helpers starting with <code>@</code> indicate "global
+              <span class="underscores-color">data</span>" is provided,
+              available anywhere within the theme.
+            </p>
+            <div class="filepath"><code>partials/post-card.hbs</code></div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-handlebars">&lt;article class="post-card"&gt;
+  {{#if feature_image}}
+    &lt;a class="post-card-image-link" href="{{url}}"&gt;
+      &lt;img class="post-card-image" src="{{img_url feature_image}}" alt="{{title}}" /&gt;
+    &lt;/a&gt;
+  {{/if}}
+  &lt;div class="post-card-content"&gt;
+    &lt;a class="post-card-content-link" href="{{url}}"&gt;
+      &lt;header class="post-card-header"&gt;
+        &lt;h2 class="post-card-title"&gt;{{title}}&lt;/h2&gt;
+      &lt;/header&gt;
+      &lt;section class="post-card-excerpt"&gt;
+        &lt;p&gt;{{excerpt}}&lt;/p&gt;
+      &lt;/section&gt;
+    &lt;/a&gt;
+    &lt;footer class="post-card-meta"&gt;
+      &lt;span class="post-card-author"&gt;{{author.name}}&lt;/span&gt;
+    &lt;/footer&gt;
+  &lt;/div&gt;
+&lt;/article&gt;
+</code></pre>
+            <div class="filepath"><code>partials/footer.hbs</code></div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-handlebars">&lt;footer class="site-footer"&gt;
+  &lt;a class="site-footer-link" href="{{@site.url}}"&gt;{{@site.title}}&lt;/a&gt;
+  &copy; {{date format="YYYY"}} &mdash; All rights reserved.
+&lt;/footer&gt;
+</code></pre>
+            <h3>We are at the index, homepage or root</h3>
+            <p>
+              This content will be outputted at the
+              <code>{{{body}}}</code> helper.
+            </p>
+            <div class="filepath"><code>index.hbs</code></div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-handlebars">{{!&lt; default}}
+
+{{#foreach posts}}
+  {{&gt; "post-card"}}
+{{/foreach}}</code></pre>
+            <p>
+              Here is the conclusive example of the file where everything goes:
+            </p>
+            <div class="filepath"><code>default.hbs</code></div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-handlebars">&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;{{@site.title}}&lt;/title&gt;
+    &lt;link rel="stylesheet" type="text/css" href="{{asset "css/style.css"}}" /&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+
+    {{&gt; "header"}}
+
+    {{{body}}}
+
+    &lt;a href="/easter-egg"&gt;Where the routing goes&lt;/a&gt;
+
+    {{&gt; "footer"}}
+
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+            <h3>Analysis of the Homepage Example</h3>
+            <p>
+              Let us dissect the interplay of the various components within our
+              homepage example.
+            </p>
+            <ul class="moustache-list">
+              <li>
+                <strong>Inclusion of Header and Footer:</strong> It incorporates
+                <code>{{&gt; "header"}}</code> and
+                <code>{{&gt; "footer"}}</code> to integrate the respective
+                partials.
+              </li>
+              <li>
+                <strong>Iteration through Posts:</strong> The
+                <code>{{#foreach posts}} ... {{/foreach}}</code> block iterates
+                over the collection of posts provided by Ghost, which are
+                typically authored by an administrator within the Admin panel.
+              </li>
+              <li>
+                <strong>Rendering of Post Cards:</strong> Within the loop,
+                <code>{{&gt; "post-card"}}</code> is invoked for each post. The
+                context inside the partial is programmatically set to the
+                current post in the iteration, thereby ensuring correct
+                functionality of helpers such as <code>{{title}}</code> and
+                <code>{{excerpt}}</code>.
+              </li>
+            </ul>
+          </section>
+          <hr />
+          <section id="metalsmith-introduction">
+            <h2>Introduction to Metalsmith</h2>
+            <p>
+              Metalsmith is an exceptionally straightforward, pluggable
+              <abbr>SSG</abbr>. Its distinctive characteristic lies in its core
+              philosophy: <strong>every component is a plugin</strong>.
+            </p>
+            <p>
+              Unlike other <abbr>SSG</abbr>s that offer a fixed set of features,
+              Metalsmith provides a minimalist framework, delegating further
+              functionality to the plugin ecosystem.
+            </p>
+            <h3>The Core Pipeline</h3>
+            <p>Metalsmith operates on a fundamental, three-step pipeline.</p>
+            <ul class="moustache-list">
+              <li>
+                <strong>Read:</strong> Ingests all files from a designated
+                source directory (e.g., <code>src/</code>) and loads them into
+                memory. Each file is represented as a JavaScript object
+                containing its main data and associated metadata.
+              </li>
+              <li>
+                <strong>Process:</strong> This collection of file objects then
+                undergoes a series of transformations via plugins. Each plugin
+                possesses the capability to manipulate the files by modifying
+                their content or adding and removing files from the collection.
+              </li>
+              <li>
+                <strong>Write:</strong> Upon completion of all plugin
+                operations, Metalsmith outputs the resulting files to a
+                specified destination directory (e.g., <code>build/</code>).
+              </li>
+            </ul>
+            <h3>The Efficacy of Metadata</h3>
+            <p>
+              Metadata is handled in quite neat a manner in our upcoming
+              examples: when Metalsmith processes a file, it parses any
+              front-matter (e.g., YAML at the apex of a Markdown file) and
+              exposes it as an associated metadata object. This metadata is then
+              propagated through the plugin chain.
+            </p>
+            <p>
+              For example, a Markdown plugin would read the raw content of a
+              file, convert it to <abbr>HTML</abbr>, and update the file
+              object's <code>contents</code> property. A layouts plugin would
+              then receive that HTML content and inject it into a Handlebars
+              template, utilizing the file's metadata to populate variables such
+              as <code>{{title}}</code> or <code>{{author}}</code>.
+            </p>
+          </section>
+          <hr />
+          <section id="metalsmith-project-structure">
+            <h2>Project Structure</h2>
+            <p>
+              A typical directory structure for a Metalsmith project provides a
+              clear separation of concerns and facilitates a clean build
+              process.
+            </p>
+            <pre><code class="language-plaintext">.
+├── build/
+├── layouts/
+│   ├── post.hbs
+│   └── index.hbs
+├── src/
+│   ├── posts/
+│   │   ├── first-post.md
+│   │   ├── second-post.md
+│   │   └── third-post.md
+│   └── index.md
+└── metalsmith.js</code></pre>
+            <p>In case you would like to follow along:</p>
+            <pre><code class="language-bash">mkdir -p layouts src/posts</code></pre>
+            <ul class="moustache-list">
+              <li>
+                <code>build/</code>: This is the destination for the built site.
+                It's created automatically by Metalsmith and contains the final
+                <abbr>HTML</abbr> files and any other assets.
+              </li>
+              <li>
+                <code>layouts/</code>: This directory holds Handlebars
+                templates; these define the structure and layout of different
+                pages.
+              </li>
+              <li>
+                <code>src/</code>: This is the source directory for the content.
+                Metalsmith reads all files from here to begin the build process.
+              </li>
+              <li>
+                <code>metalsmith.js</code>: Build script where the Metalsmith
+                pipeline is defined and plugins are configured.
+              </li>
+            </ul>
+          </section>
+          <hr />
+          <section id="metalsmith-setup">
+            <h2>Metalsmith Setup</h2>
+            <p>
+              The setup for a blog involves installing the core Metalsmith
+              library along with a few key plugins:
+            </p>
+            <pre><code class="language-bash">npm install metalsmith \
+handlebars \
+@metalsmith/collections \
+@metalsmith/markdown \
+@metalsmith/permalinks \
+@metalsmith/layouts \
+jstransformer-handlebars</code></pre>
+            <p>Here is a concise overview of these packages.</p>
+            <ul class="moustache-list">
+              <li>
+                <!----><code>metalsmith</code>: The core Metalsmith library.
+              </li>
+              <li>
+                <code>handlebars</code>: The Handlebars templating engine.
+              </li>
+              <li>
+                <code>@metalsmith/collections</code>: Groups files together,
+                ideal for creating a list of blog posts.
+              </li>
+              <li>
+                <code>@metalsmith/markdown</code>: Converts Markdown files into
+                <abbr>HTML</abbr>.
+              </li>
+              <li>
+                <code>@metalsmith/permalinks</code>: Creates clean,
+                user-friendly <abbr>URL</abbr>s for your posts.
+              </li>
+              <li>
+                <code>@metalsmith/layouts</code>: A plugin to apply Handlebars
+                templates to a given content.
+              </li>
+              <li>
+                <code>jstransformer-handlebars</code>: Dependency of
+                <code>@metalsmith/layouts</code>. See the official registry's
+                <a href="https://www.npmjs.com/package/@metalsmith/layouts"
+                  >reference</a
+                >
+                on how the plugin works with <code>transformers</code> and they
+                "should be installed separately".
+              </li>
+            </ul>
+          </section>
+          <hr />
+          <section id="metalsmith-build-script">
+            <h2>The Build Script</h2>
+            <p>
+              The build script is where to define the Metalsmith pipeline. It
+              chains together all the plugins to transform source files into a
+              website in this case, of whatever the output as defined.
+            </p>
+            <div class="filepath">
+              <code>metalsmith.js</code>
+            </div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-javascript">// Require the necessary modules
+const Metalsmith = require('metalsmith');
+const collections = require('@metalsmith/collections');
+const markdown = require('@metalsmith/markdown');
+const permalinks = require('@metalsmith/permalinks');
+const layouts = require('@metalsmith/layouts');
+
+// Initialize Metalsmith in the current directory
+Metalsmith(__dirname)
+  // Clean the build directory before starting
+  .clean(true)
+  // Specify the source and destination directories
+  .source('./src')
+  .destination('./build')
+  // Add global metadata, available in all templates
+  .metadata({
+    sitename: "My Simple Metalsmith Blog",
+    siteurl: "https://example.com/",
+  })
+  // Group all markdown files in the 'posts' directory into a 'posts' collection
+  .use(collections({
+    posts: 'posts/*.md'
+  }))
+  // Convert all markdown files to HTML
+  .use(markdown())
+  // Apply clean and user-friendly URLs
+  .use(
+    permalinks([
+      {
+        pattern: ':collection/:title',
+        collection: 'posts'
+      }
+    ])
+  )
+  // Apply the Handlebars layouts to the HTML files
+  .use(layouts({
+    engine: 'handlebars',
+    directory: 'layouts',
+    transform: 'jstransformer-handlebars',
+    pattern: "**/*.html"
+  }))
+  // Build the site
+  .build(function (err) {
+    if (err) throw err;
+    console.log('Site built successfully!');
+  });</code></pre>
+          </section>
+          <hr />
+          <section id="metalsmith-running-the-build">
+            <h2>Running the Build</h2>
+            <p>
+              To build the site, simply execute the build script from a
+              terminal:
+            </p>
+            <pre><code class="language-bash">node metalsmith.js</code></pre>
+            <p>
+              After the script runs, you will see a "<em
+                >Site built successfully!</em
+              >" message, and your <code>build/</code> directory will be
+              populated with the generated <abbr>HTML</abbr> files, ready to be
+              deployed.
+            </p>
+          </section>
+          <hr />
+          <section id="metalsmith-blog-example">
+            <h2>Creating a Blog</h2>
+            <p>
+              With the build process in place, we shall create a simple blog.
+              This involves creating content with metadata, defining layouts to
+              display that content, and using collections to create an index
+              page (for posts).
+            </p>
+            <h3>Rich Metadata in Posts</h3>
+            <p>
+              Create a Markdown file for a blog post in <code>src/posts/</code>.
+              Use <abbr>YAML</abbr> front-matter to add metadata such as title,
+              author, date, and the layout to use.
+            </p>
+            <div class="filepath"><code>src/posts/first-post.md</code></div>
+            <pre class="has-filepath-above"><code class="language-yaml">---
+title: First Post
+author: Yours Truly
+date: 2026-1-07
+layout: post.hbs
+---
+
+This post is written in Markdown as of yet, yet not forever!</code></pre>
+            <h3>The Post Layout</h3>
+            <p>
+              Create a layout in <code>layouts/post.hbs</code> to render the
+              individual blog posts. This template will display the metadata and
+              the post content.
+            </p>
+            <div class="filepath"><code>layouts/post.hbs</code></div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-handlebars">&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;{{ sitename }} - {{ title }}&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;article&gt;
+      &lt;h1&gt;{{ title }}&lt;/h1&gt;
+      &lt;p&gt;By {{ author }} on {{ date }}&lt;/p&gt;
+      &lt;div&gt;
+        {{{ content }}}
+      &lt;/div&gt;
+    &lt;/article&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+            <h3>The Index Page and Collections</h3>
+            <p>
+              The <code>@metalsmith/collections</code> plugin groups all your
+              posts into a <code>posts</code> collection just as we defined it
+              to do in <a href="#metalsmith-build-script">the build script</a>.
+            </p>
+            <p>
+              You can then loop over this collection in a layout to create an
+              index page that lists all your posts.
+            </p>
+            <p>First, create the source file for the index page.</p>
+            <div class="filepath"><code>src/index.md</code></div>
+            <pre class="has-filepath-above"><code class="language-yaml">---
+title: Home
+layout: index.hbs
+---
+
+Welcome to my new blog!
+</code></pre>
+            <p>
+              Now, create the corresponding layout that iterates over the
+              <code>posts</code> collection. We output a list item per post.
+            </p>
+            <div class="filepath"><code>layouts/index.hbs</code></div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-handlebars">&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;{{ sitename }}&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;{{ sitename }}&lt;/h1&gt;
+
+    {{{contents}}}
+
+    &lt;h2&gt;Posts:&lt;/h2&gt;
+    &lt;ul&gt;
+      {{#each collections.posts}}
+        &lt;li&gt;
+          &lt;a href="/{{ this.permalink }}/"&gt;{{ this.title }}&lt;/a&gt;
+        &lt;/li&gt;
+      {{/each}}
+    &lt;/ul&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+            <p>
+              That covers the basics for a reliable blog-creation workflow. If
+              you were to build the site at this stage (granted the steps above)
+              it would be crude <abbr>HTML</abbr>, yet I hope the reader sees
+              how practical templating is on itself.
+            </p>
+            <p>
+              One could test it from <code>build/</code> using a development
+              server like
+              <a href="https://www.npmjs.com/package/live-server">live-server</a
+              >.
+            </p>
+            <p>
+              All that would be left to do is create better layouts and add
+              classes. That part escapes the scope of this documentation.
+            </p>
+          </section>
+          <hr />
+          <section id="metalsmith-more-plugins">
+            <h2>Mentioning Extra Plugins</h2>
+            <p>
+              Metalsmith facilitates a high degree of customization. The
+              following are illustrative examples of achievable functionalities:
+            </p>
+            <ul class="moustache-list">
+              <li>
+                <strong>Drafts:</strong> The
+                <code>@metalsmith/drafts</code> plugin can be utilized to
+                conceal posts that are not yet prepared for publication.
+              </li>
+              <li>
+                <strong>RSS Feeds:</strong> The
+                <code>@metalsmith/rss</code> plugin is capable of generating an
+                <abbr>RSS</abbr> feed for one's blog.
+              </li>
+              <li>
+                <strong>Sass/Less:</strong> Pre-process <abbr>CSS</abbr> with
+                plugins such as <code>@metalsmith/sass</code> or
+                <code>@metalsmith/less</code>.
+              </li>
+            </ul>
+          </section>
+          <hr />
+          <section id="metalsmith-custom-plugins">
+            <h2>Creating a Custom Plugin</h2>
+            <p>
+              For more advanced use cases, you can create your own Metalsmith
+              plugins.
+            </p>
+            <p>
+              A plugin is a JavaScript function that receives the
+              <code>files</code> object and the
+              <code>metalsmith</code> instance. It can manipulate the
+              <code>files</code>
+              object before passing it to the next plugin in the chain.
+            </p>
+            <h3>Example: A Truncation Plugin</h3>
+            <p>
+              Let us construct a custom plugin designed to truncate the content
+              of each file to a specified length and add it to the file's
+              metadata as an <code>excerpt</code>.
+            </p>
+            <div class="filepath">
+              <code>truncate.js</code>
+            </div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-javascript">function truncate (options) {
+  // Return the plugin function closure
+  return function (files, metalsmith, done) {
+    // Iterate over each file in the collection
+    Object.keys(files).forEach(function (filename) {
+      // Retrieve the current file object
+      const file = files[filename];
+      // Truncate the file content to the specified length
+      const excerpt = file.contents.toString().slice(0, options.length);
+      // Assign the generated excerpt to the file's metadata (plus ellipsis)
+      file.excerpt = excerpt + '...';
+    });
+    // Invoke the callback to signal completion
+    done();
+  };
+}
+
+module.exports = truncate;</code></pre>
+            <h3>Integrating the Plugin</h3>
+            <p>
+              To use this plugin, require it in your
+              <code>metalsmith.js</code> file and add it to the pipeline with
+              <code>.use()</code>.
+            </p>
+            <pre><code class="language-javascript">// ... (other requires)
+const truncate = require('./truncate.js'); // Require your custom plugin
+
+Metalsmith(__dirname)
+  // ... (other configuration)
+  .use(truncate({ length: 10 })) // Use the plugin before converting to HTML
+  .use(markdown())
+  // Otherwise we would include markup in our text string by now
+  // ...
+  .use(layouts({
+  // ...
+  }))
+  .build(function (err) {
+    if (err) throw err;
+  });</code></pre>
+            <h3>Adding the Excerpt to a Template</h3>
+            <p>
+              Now that the plugin adds the <code>excerpt</code> to each file's
+              metadata, one can use it in templates, for instance, on an index
+              page.
+            </p>
+            <div class="filepath"><code>layouts/index.hbs</code></div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-handlebars">{!-- ... --}
+{{#each collections.posts}}
+  &lt;article&gt;
+    &lt;h2&gt;&lt;a href="/{{ this.permalink }}/"&gt;{{ this.title }}&lt;/a&gt;&lt;/h2&gt;
+    &lt;p&gt;{{ this.excerpt }}&lt;/p&gt;
+  &lt;/article&gt;
+{{/each}}
+{!-- ... --}</code></pre>
+          </section>
+          <hr />
+          <section id="eleventy-introduction">
+            <h2>Templating with Eleventy</h2>
+            <p>
+              <a href="https://www.11ty.dev/" target="_blank">Eleventy</a>, or
+              <b>11ty</b>, is a modern static site generator that is designed to
+              be simple and flexible. It supports over ten different templating
+              languages, including Handlebars and Nunjucks.
+            </p>
+            <p>
+              Its core philosophy is centered around the idea of
+              "<em>zero-config</em>" to get started, yet it provides a rich set
+              of features for more complex projects. Eleventy works by
+              transforming a directory of templates into a ready-to-deploy
+              static website; this being similar to how Metalsmith works.
+            </p>
+            <h3>Key Features of Eleventy</h3>
+            <ul class="moustache-list">
+              <li>
+                <strong>Simplicity:</strong> Configuration is easy to set up.
+                Numerous templating languages could be used at once in the same
+                project, for instance.
+              </li>
+              <li>
+                <strong>Extensibility:</strong> With a mature plugin ecosystem,
+                one can add features like image optimization, RSS feeds, and
+                more.
+              </li>
+              <li>
+                <strong>Data-Driven:</strong> Eleventy's data cascade allows you
+                to pull data from various sources (JSON, JS, front matter) and
+                make it available to your templates.
+              </li>
+            </ul>
+          </section>
+          <hr />
+          <section id="eleventy-project-structure">
+            <h2>Project Structure</h2>
+            <p>
+              Eleventy offers a flexible structure that can be adapted to one's
+              preferences.
+            </p>
+            <pre><code class="language-plaintext">.
+├── _site/
+├── _data/
+│   └── global.json
+├── _includes/
+│   └── base.hbs
+├── posts/
+│   ├── first-post.md
+│   ├── second-post.md
+│   └── third-post.md
+├── eleventy.config.js
+└── index.md</code></pre>
+            <p>In case you would like to follow along:</p>
+            <pre><code class="language-bash">mkdir _data _includes posts</code></pre>
+            <ul class="moustache-list">
+              <li>
+                <code>_site/</code>: Eleventy will create this directory and
+                build the site here.
+              </li>
+              <li>
+                <code>_data/</code>: For global data files. Any JSON or JS file
+                here will be available in the templates.
+              </li>
+              <li>
+                <code>_includes/</code>: This is where to store reusable
+                template partials, like headers, footers, and layouts.
+              </li>
+              <li>
+                <code>posts/</code>: A content directory for blog posts,
+                typically written in Markdown.
+              </li>
+              <li>
+                <code>index.md</code>: The main entry point which will be
+                processed into the homepage.
+              </li>
+              <li>
+                <code>eleventy.config.js</code>: The configuration file for
+                Eleventy, where one can customize settings, add plugins, and
+                define custom filters and shortcodes.
+              </li>
+            </ul>
+          </section>
+          <hr />
+          <section id="eleventy-building-a-blog">
+            <h2>Building a Blog with Handlebars</h2>
+            <p>
+              Let us build a simple blog to demonstrate how to use Handlebars
+              with Eleventy.
+            </p>
+            <h3>Setup and Configuration</h3>
+            <p>
+              First, install Eleventy and the Handlebars plugin. As Handlebars
+              is not a default templating engine, we need to add it on its own
+              and return a configuration object that tells <b>11ty</b> to use
+              it.
+            </p>
+            <pre><code class="language-bash">npm install @11ty/eleventy \
+@11ty/eleventy-plugin-handlebars --save-dev</code></pre>
+            <div class="filepath">
+              <code>eleventy.config.js</code>
+            </div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-javascript">const handlebarsPlugin = require("@11ty/eleventy-plugin-handlebars");
+
+module.exports = function (eleventyConfig) {
+  eleventyConfig.addPlugin(handlebarsPlugin);
+
+  return {
+    markdownTemplateEngine: "hbs",
+  };
+};</code></pre>
+            <h3>Creating a Layout</h3>
+            <p>
+              Create a base layout in <code>_includes/</code>. This will serve
+              as the main template for your pages.
+            </p>
+            <p>
+              The
+              <code>{{{ content }}}</code> helper is where the content from
+              other files will be injected.
+            </p>
+            <div class="filepath">
+              <code>_includes/base.hbs</code>
+            </div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-handlebars">&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;{{ title }}&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;main&gt;
+      {{{ content }}}
+    &lt;/main&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            <h3>Writing Posts</h3>
+            <p>
+              Create posts in the <code>posts/</code> directory using Markdown.
+              The front matter at the top of each file provides metadata, such
+              as title, layout and tags for collections.
+            </p>
+            <div class="filepath">
+              <code>posts/first-post.md</code>
+            </div>
+            <pre class="has-filepath-above"><code class="language-yaml">---
+title: "The First Post"
+layout: "base.hbs"
+tags: "posts"
+---
+
+Welcome to my first post! This is where the content begins...</code></pre>
+            <h3>Using Collections</h3>
+            <p>
+              <b>11ty</b> creates a collection for each tagged directory. You
+              can access all posts in the <code>posts/</code> directory through
+              <code>collections.posts</code>.
+            </p>
+            <p>
+              Let's create an index page to list them. Do not worry about
+              including templating syntax inside the .<abbr>MD</abbr> file.
+            </p>
+            <div class="filepath">
+              <code>index.md</code>
+            </div>
+            <pre class="has-filepath-above"><code class="language-yaml">---
+title: "Homepage"
+layout: "base.hbs"
+---
+
+&lt;h1&gt;Welcome to the Blog&lt;/h1&gt;
+&lt;ul&gt;
+  {{#each collections.posts}}
+    &lt;li&gt;&lt;a href="{{ this.url }}"&gt;{{ this.data.title }}&lt;/a&gt;&lt;/li&gt;
+  {{/each}}
+&lt;/ul&gt;</code></pre>
+            <h3>Building the project</h3>
+            <p>The <code>npx</code> command is used to build the project.</p>
+            <pre><code class="language-bash">npx eleventy</code></pre>
+          </section>
+          <hr />
+          <section id="eleventy-nunjucks" class="nunjucks-section">
+            <h2>Pivoting to Nunjucks</h2>
+            <p>
+              While Handlebars is a great starting point because of its pre-set
+              helpers, Nunjucks offers an objectively better choice for complex
+              sites. Inspired by Python's Jinja2, it introduces features like
+              template inheritance and advanced logic (or just plain, actual
+              logic), absent in Handlebars.
+            </p>
+            <h3>
+              Clearing <code>.<abbr>hbs</abbr></code> related files
+            </h3>
+            <p>
+              Before we begin, it's essential to remove the Handlebars-specific
+              files from our project to avoid conflicts. We'll be creating
+              Nunjucks equivalents for these files.
+            </p>
+            <pre><code class="language-bash">rm index.md \
+_includes/base.hbs \
+posts/first-post.md</code></pre>
+            <p>
+              What could be done, is use one engine for content, yet another for
+              layouts: one could render Markdown while injecting it into a
+              Nunjucks layout (quite common).
+            </p>
+            <p>
+              There is also <strong>template chaining</strong> for a given
+              particular file, but we are not even nearly getting into that in
+              this general introduction.
+            </p>
+            <p>
+              My suggestion after understanding these basics is to work with a
+              <a href="https://www.11ty.dev/docs/starter/">starter tempalte</a>
+              that suits the needs of a project.
+            </p>
+            <p>
+              One thing to note is that <b>11ty</b> does not delete files from
+              the <code>_site/</code> directory when rebuilding, so
+              <code>first-post.html</code> will still be there although would
+              not bother for this specific configuration.
+            </p>
+          </section>
+          <hr />
+          <section id="eleventy-nunjucks-setup" class="nunjucks-section">
+            <h2>Configuration and Setup</h2>
+            <p>
+              We edit the configuration file at the root of the project. This
+              file will define a custom shortcode to display the current year
+              which we will use in our base layout, and define the templating
+              engines.
+            </p>
+            <div class="filepath">
+              <code>eleventy.config.js</code>
+            </div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-javascript">module.exports = function (eleventyConfig) {
+  eleventyConfig.addShortcode("year", () =&gt; `${new Date().getFullYear()}`);
+
+  return {
+    markdownTemplateEngine: "njk",
+    htmlTemplateEngine: "njk",
+  };
+};</code></pre>
+            <h3>Creating a Base Layout with Blocks</h3>
+            <p>
+              One of the most powerful features of Nunjucks is
+              <strong>template inheritance</strong>. This allows you to define a
+              base layout with several content blocks that can be overridden by
+              child templates.
+            </p>
+            <p>
+              Let's create a new base layout at
+              <code>_includes/base.njk</code> that includes blocks for the
+              title, content, and scripts.
+            </p>
+            <div class="filepath">
+              <code>_includes/base.njk</code>
+            </div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-nunjucks">&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+    &lt;title&gt;{% block title %}My Eleventy Site{% endblock %}&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;header&gt;
+      &lt;h1&gt;Welcome to the Site&lt;/h1&gt;
+    &lt;/header&gt;
+    &lt;main&gt;
+      {% block content %}{% endblock %}
+    &lt;/main&gt;
+    &lt;footer&gt;
+      &lt;p&gt;&copy; {% year %} My Company&lt;/p&gt;
+    &lt;/footer&gt;
+    {% block scripts %}{% endblock %}
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+            <h3>Extending the Base Layout for a Post</h3>
+            <p>
+              Now that we have a base layout, we can create a more particular
+              layout for our blog posts. Create a new file that extends the base
+              layout and overrides the <code>title</code> and
+              <code>content</code> blocks.
+            </p>
+            <div class="filepath">
+              <code>_includes/post.njk</code>
+            </div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-nunjucks">{% extends "base.njk" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+  &lt;article&gt;
+    &lt;h2&gt;{{ title }}&lt;/h2&gt;
+    {{ content | safe }}
+  &lt;/article&gt;
+{% endblock %}</code></pre>
+          </section>
+          <hr />
+          <section id="eleventy-markdown-nunjucks" class="nunjucks-section">
+            <h2>The Markdown and Nunjucks Workflow</h2>
+            <p>
+              Here is where Eleventy's flexibility truly shines! By using
+              Nunjucks for our layouts (<code>.njk</code> files), we can handle
+              all the structural <abbr>HTML</abbr>, logic and templating in one
+              place. Simultaneously, we can use Markdown (<code>.md</code>
+              files) for writing our content.
+            </p>
+            <p>
+              This separation of concerns is incredibly effective. It allows
+              content creators to focus solely on writing without needing to
+              worry about the complexities of <abbr>HTML</abbr> and templating.
+              Meanwhile, developers can build and maintain the site's structure
+              and design in the Nunjucks layouts, knowing that the content will
+              be slotted in correctly.
+            </p>
+            <h3>Creating Content and the Index Page</h3>
+            <p>
+              Now, let us create a new blog post in Markdown and an index page
+              in Nunjucks to display all our posts.
+            </p>
+            <div class="filepath">
+              <code>posts/second-post.md</code>
+            </div>
+            <pre class="has-filepath-above"><code class="language-yaml">---
+title: "Second Post: Nunjucks"
+layout: "post.njk"
+tags: "posts"
+---
+
+This is the content of my second post, now implemented with a Nunjucks layout!</code></pre>
+            <p>
+              Finally, let's create an <code>index.njk</code> at the root of our
+              project to list all the posts. This file will extend our
+              <code>base.njk</code> layout and use a loop to iterate over the
+              <code>posts</code> collection.
+            </p>
+            <div class="filepath">
+              <code>index.njk</code>
+            </div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-nunjucks">{% extends "base.njk" %}
+
+{% block title %}Blog Index{% endblock %}
+
+{% block content %}
+  &lt;h2&gt;All Posts&lt;/h2&gt;
+  &lt;ul&gt;
+    {% for post in collections.posts %}
+      &lt;li&gt;&lt;a href="{{ post.url }}"&gt;{{ post.data.title }}&lt;/a&gt;&lt;/li&gt;
+    {% endfor %}
+  &lt;/ul&gt;
+{% endblock %}</code></pre>
+          </section>
+          <hr />
+          <section id="eleventy-advanced-topics">
+            <h2>Data and Filters</h2>
+            <p>
+              Let us look at a few features that help build more sophisticated
+              sites.
+            </p>
+            <h3>The Data Cascade</h3>
+            <p>
+              Eleventy's "data cascade" is a powerful system that merges data
+              from multiple sources and makes it available to templates. The
+              hierarchy is as follows (from highest to lowest priority):
+            </p>
+            <ol class="nunjucks-list">
+              <!-- computed data, front matter data in a template, template data files, directory data files (and their parent directories), front matter data in layouts, configuration API global data, and global data files. -->
+              <li>&nbsp;Computed data.</li>
+              <li>&nbsp;Front matter data in <strong>templates</strong>.</li>
+              <li>&nbsp;Template data files.</li>
+              <li>
+                &nbsp;Directory data files (including their parent directories).
+              </li>
+              <li>&nbsp;Front matter data in <strong>layouts</strong>.</li>
+              <li>
+                &nbsp;Configuration API global data (added via the
+                <code>addGlobalData</code> method in the configuration file).
+              </li>
+              <li>&nbsp;Global data files (from <code>_data/</code>).</li>
+            </ol>
+            <p>
+              Note that, by default, <b>11ty</b> performs a deep merge for
+              objects and arrays, combining values from different sources.
+            </p>
+            <h3>Global Data Files</h3>
+            <p>
+              One could create global data files in the
+              <code>_data/</code> directory. This file will hold site-wide
+              variables.
+            </p>
+            <div class="filepath">
+              <code>_data/global.json</code>
+            </div>
+            <pre class="has-filepath-above"><code class="language-json">{
+  "mainTitle": "Blog",
+  "author": "Yours Truly"
+}</code></pre>
+            <p>
+              This data is now available in any template via the
+              <strong>filename</strong> "global":
+              <code>{{ global.name }}</code>.
+            </p>
+            <h3>Filters</h3>
+            <p>
+              One could extend Eleventy with custom shortcodes (as we saw
+              already) and filters in the
+              <code>eleventy.config.js</code> file.
+            </p>
+            <p>
+              Filters are functions that transform data. Here's a filter to
+              format the date using <code>date-fns</code>.
+            </p>
+            <pre><code class="language-bash">npm install date-fns</code></pre>
+            <div class="filepath">
+              <code>eleventy.config.js</code>
+            </div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-javascript">const { format } = require("date-fns");
+
+module.exports = function(eleventyConfig) {
+  eleventyConfig.addFilter("formatDate", function (date, dateFormat) {
+    return format(new Date(date), dateFormat || "yyyy-MM-dd");
+  });
+
+  return {
+    markdownTemplateEngine: "njk",
+    htmlTemplateEngine: "njk",
+  };
+};</code></pre>
+            <p>And to use it in templates:</p>
+            <pre><code class="language-nunjucks">{{ page.date | formatDate("MMMM d, yyyy") }}</code></pre>
+            <p>
+              One could also just use <code>{{ date }}</code> inside individual
+              posts. Where <code>page</code> refers to that context.
+            </p>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-nunjucks">{# ... #}
+    &lt;p&gt;By: {{ global.author }}&lt;/p&gt;
+    &lt;p&gt;Date: {{ date | formatDate("MMMM d, yyyy") }}&lt;/p&gt;
+{# ... #}</code></pre>
+            <p>
+              This assumes you have a front matter <code>date</code> property in
+              your layout with a proper value asigned to it, be it a string,
+              timestamp or date object. So we use the
+              <code>Date</code> constructor to generate an object for
+              <code>date-fns</code>.
+            </p>
+            <p>
+              Note the <code>|</code> pipe operator. We use it to set the first
+              argument of the <code>formatDate</code> function. Pipes can also
+              be used to <strong>chain filters</strong> one after the other.
+            </p>
+            <p>
+              We have also used the pipe operator previously to sanitize
+              content. This is similar to how the Metalsmith plugin chain works
+              but at a more particular level.
+            </p>
+          </section>
+          <hr />
+          <section id="nextjs-introduction" class="nunjucks-section">
+            <h2>Templating with Next.js and the App Router</h2>
+            <p>
+              <a href="https://nextjs.org/">Next.js</a> is a robust
+              <a href="https://react.dev/">React</a>
+              framework for building server-rendered and statically generated
+              applications. While React is its primary view layer, this guide
+              focuses on integrating
+              <a href="https://mozilla.github.io/nunjucks/templating.html"
+                >Nunjucks</a
+              >
+              as a templating engine, leveraging the modern
+              <strong>App Router</strong> paradigm.
+            </p>
+            <p>
+              This approach is useful when you need to render static HTML from
+              complex data structures or when you want to separate template
+              logic from your React components.
+            </p>
+            <p>
+              In this guide, we will build a small site that demonstrates
+              several key data-fetching strategies within Next.js, all while
+              using Nunjucks to render the final HTML.
+            </p>
+          </section>
+          <hr />
+          <section id="nextjs-setup" class="nunjucks-section">
+            <h2>Setup &amp; Config</h2>
+            <p>
+              First, create a new Next.js application using the command-line
+              interface, then navigate into the new directory and install the
+              packages we'll need for Nunjucks templating, date formatting, and
+              HTML sanitization.
+            </p>
+            <p>
+              The installer will ask several questions; for this tutorial, we
+              recommend using the default answers, but ensure you select
+              <strong>No for TypeScript</strong> and the
+              <strong><code>app</code> directory</strong>.
+            </p>
+            <pre><code class="language-bash">npx create-next-app@latest nunjucks-nextjs</code></pre>
+            <p>
+              Once the project is created, navigate into the new directory and
+              install the packages we'll need for Nunjucks templating, date
+              formatting, HTML sanitization and watching for file changes.
+            </p>
+            <pre><code class="language-bash">cd nunjucks-nextjs
+npm install nunjucks \
+date-fns \
+isomorphic-dompurify \
+chokidar</code></pre>
+            <p>We will add a few folders for our templates and data.</p>
+            <pre><code class="language-bash">mkdir lib templates data app/products app/articles app/dashboard</code></pre>
+            <p>Your project structure should end up like this:</p>
+            <pre><code class="language-plaintext">nunjucks-nextjs/
+├── app/
+│   ├── layout.js
+│   ├── page.js
+│   ├── products/
+│   │   └── page.js
+│   ├── articles/
+│   │   └── page.js
+│   └── dashboard/
+│       └── page.js
+├── lib/
+│   └── nunjucks.js
+├── templates/
+│   ├── products.njk
+│   ├── articles.njk
+│   └── home.njk
+├── data/
+│   └── data.json
+├── .env.local
+├── package.json
+└── next.config.js</code></pre>
+            <p>
+              Finally, create a <code>.env.local</code> file in the root of your
+              project to store environment variables, such as the
+              <abbr>API</abbr> <abbr>URL</abbr> and token, and any URLs that
+              should not be hard-coded.
+            </p>
+            <div class="filepath"><code>.env.local</code></div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-bash">STRAPI_API_URL=http://localhost:1337
+PRODUCTS_API_URL=https://some.api.com/products
+STRAPI_TOKEN=optional</code></pre>
+            <h3>Do we need extra Next.js configuration?</h3>
+            <p>
+              Because we use <code>nunjucks.configure</code> with a file path
+              (<code>fs</code> and <code>path</code>), Nunjucks is acting as a
+              back-end engine that reads files directly from the system. It is
+              not necessarily asking Next.js to bundle the templates; but rather
+              reading them, like a database would a record.
+            </p>
+            <p>
+              At least for these testing examples we do not need to tell
+              Turbopack or Webpack how to manage the template files as part of
+              our build environment.
+            </p>
+          </section>
+          <hr />
+          <section id="nextjs-environment" class="nunjucks-section">
+            <h2>The Nunjucks Environment</h2>
+            <p>
+              To keep our code organized, we'll create a helper module at
+              <code>lib/nunjucks.js</code>. This file is responsible for
+              initializing the Nunjucks environment one time (pattern known as
+              "a singleton") and making it available to our application.
+            </p>
+            <p>
+              This is also the perfect place to extend Nunjucks. In this file,
+              we add two custom filters:
+              <code>formatDate</code> to make timestamps human-readable and
+              <code>currency</code> to format numbers as US dollars.
+            </p>
+            <div class="filepath"><code>lib/nunjucks.js</code></div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-javascript">import nunjucks from 'nunjucks';
+import path from 'path';
+import { format } from 'date-fns';
+
+let env = null;
+
+function getEnvironment() {
+  if (!env) {
+    env = nunjucks.configure(path.join(process.cwd(), 'templates'), {
+      autoescape: true,
+      watch: process.env.NODE_ENV === 'development',
+      noCache: process.env.NODE_ENV === 'development',
+    });
+
+    // Custom date filter
+    env.addFilter(
+      'formatDate',
+      function (dateString, formatString = 'MMMM d, yyyy') {
+        try {
+          return format(new Date(dateString), formatString);
+        } catch (error) {
+          console.error('Error formatting date:', error);
+          return dateString;
+        }
+      },
+    );
+
+    // Custom currency filter
+    env.addFilter('currency', function (value) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+      }).format(value);
+    });
+  }
+
+  return env;
+}
+
+export function renderNunjucks(template, context) {
+  try {
+    const environment = getEnvironment();
+    return environment.render(template, context);
+  } catch (error) {
+    console.error('Error rendering Nunjucks template:', error);
+    throw new Error(`Failed to render template ${template}: ${error.message}`);
+  }
+}</code></pre>
+          </section>
+          <hr />
+          <section id="nextjs-home-page" class="nunjucks-section">
+            <h2>Root Layout &amp; Home Page</h2>
+            <p>
+              In the App Router, <code>app/layout.js</code> defines the root
+              <abbr>HTML</abbr> shell for every page. The
+              <code>{children}</code> prop is where the content of individual
+              pages will be rendered.
+            </p>
+            <div class="filepath"><code>app/layout.js</code></div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-javascript">export const metadata = {
+  title: 'Next.js + Nunjucks Demo',
+  description: 'Integrating Nunjucks templates with Next.js App Router',
+};
+
+export default function RootLayout({ children }) {
+  return (
+    &lt;html lang="en"&gt;
+      &lt;body&gt;
+        &lt;nav&gt;
+          &lt;h1&gt;Templating on Next.js!&lt;/h1&gt;
+        &lt;/nav&gt;
+        {children}
+      &lt;/body&gt;
+    &lt;/html&gt;
+  );
+}</code></pre>
+            <p>
+              The home page at <code>app/page.js</code> is a Server Component,
+              so it can directly call our <code>renderNunjucks</code> function.
+              It passes data to the <code>home.njk</code> template to be
+              rendered.
+            </p>
+            <div class="filepath"><code>templates/home.njk</code></div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-nunjucks">&lt;div class="home-container"&gt;
+  &lt;h2&gt;{{ title }}&lt;/h2&gt;
+  &lt;p&gt;{{ subtitle }}&lt;/p&gt;
+  &lt;div class="links"&gt;
+    &lt;a href="/products"&gt;View Products&lt;/a&gt;
+    &lt;a href="/articles"&gt;Read Articles&lt;/a&gt;
+    &lt;a href="/dashboard"&gt;Dashboard&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            <div class="filepath"><code>app/page.js</code></div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-javascript">import { renderNunjucks } from '@/lib/nunjucks';
+
+export default async function HomePage() {
+  const html = renderNunjucks('home.njk', {
+    title: 'Welcome to Next.js + Nunjucks',
+    subtitle:
+      'Combining a modern React framework and a flexible templating engine.',
+  });
+
+  return &lt;div dangerouslySetInnerHTML={{ __html: html }} /&gt;;
+}</code></pre>
+            <p>
+              Note the use of <code>dangerouslySetInnerHTML</code>. This React
+              feature is necessary to inject the HTML string rendered by
+              Nunjucks.
+            </p>
+            <p>
+              Its name serves as a reminder to
+              <strong>always ensure</strong> the HTML you are injecting is
+              sanitized, especially if it comes from an external source.
+            </p>
+            <p>
+              We will set said tring in the
+              <a href="#nextjs-cms-page">Articles Page</a> section.
+            </p>
+          </section>
+          <hr />
+          <section id="nextjs-static-page" class="nunjucks-section">
+            <h2>Static Page (Products)</h2>
+            <p>
+              For content that doesn't change often, Next.js can pre-render
+              pages at build time. This strategy is called Static Site
+              Generation (<b>SSG</b>) and offers the best performance.
+            </p>
+            <p>
+              Our products page will demonstrate this by fetching data from a
+              local <abbr>JSON</abbr> file.
+            </p>
+            <p>
+              By exporting a <code>revalidate</code> constant, we enable
+              Incremental Static Regeneration (<b>ISR</b>). This tells Next.js
+              to re-build the page in the background at most once every hour, so
+              the content stays fresh without sacrificing performance.
+            </p>
+            <div class="filepath"><code>data/data.json</code></div>
+            <pre class="has-filepath-above"><code class="language-json">[
+  {
+    "id": 1,
+    "name": "Static Product A_m not sure",
+    "price": 15,
+    "description": "A reliable product for everyday use"
+  },
+  {
+    "id": 2,
+    "name": "Static Product B_est option",
+    "price": 50,
+    "description": "Premium features at an affordable price"
+  },
+  {
+    "id": 3,
+    "name": "Static Product C_annot afford it",
+    "price": 999.99,
+    "description": "Top-tier, professional solution"
+  }
+]</code></pre>
+            <div class="filepath"><code>templates/products.njk</code></div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-nunjucks">&lt;h2&gt;Products&lt;/h2&gt;
+&lt;p&gt;Showing {{ products.length }} products.&lt;/p&gt;
+&lt;div&gt;
+  {% for product in products %}
+    &lt;div&gt;
+      &lt;h3&gt;{{ product.name }}&lt;/h3&gt;
+      &lt;p&gt;Price: {{ product.price | currency }}&lt;/p&gt;
+      &lt;p&gt;Description: {{ product.description }}&lt;/p&gt;
+    &lt;/div&gt;
+  {% endfor %}
+&lt;/div&gt;</code></pre>
+            <div class="filepath"><code>app/products/page.js</code></div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-javascript">import { renderNunjucks } from '@/lib/nunjucks';
+import fs from 'fs/promises';
+import path from 'path';
+
+// This is a Server Component with static generation
+export const revalidate = 3600; // Every hour
+
+async function getProducts() {
+  try {
+    const filePath = path.join(process.cwd(), 'data', 'data.json');
+    const jsonData = await fs.readFile(filePath, 'utf-8');
+    return JSON.parse(jsonData);
+  } catch (error) {
+    console.error('Could not read products data:', error);
+    return []; // Return an empty array on error
+  }
+}
+
+export default async function ProductsPage() {
+  const products = await getProducts();
+  const html = renderNunjucks('products.njk', { products });
+  return &lt;div dangerouslySetInnerHTML={{ __html: html }} /&gt;;
+}</code></pre>
+          </section>
+          <hr />
+          <section id="nextjs-cms-page" class="nunjucks-section">
+            <h2>CMS Page (Articles)</h2>
+            <p>
+              A common use case for this architecture is to fetch content from a
+              headless <abbr>CMS</abbr> like
+              <a href="https://strapi.io/">Strapi</a>. This allows content
+              editors to manage articles without touching the codebase.
+            </p>
+            <p>
+              Setting up a Strapi instance is fairly straightforward, so we are
+              covering the basics for experimenting on this project simply.
+            </p>
+            <h3>Setting up Strapi</h3>
+            <p>
+              We need to install the package while making sure to select
+              <strong>skip login</strong> and the default
+              <strong>SQLite</strong> database. This was tested on version
+              <code>5.33.*</code>.
+            </p>
+            <pre><code class="language-bash">npx create-strapi-app@latest cms-for-next
+cd cms-for-next
+npm run develop</code></pre>
+            <p>
+              Now that a server is running in watch mode and a new browser tab
+              with our <abbr>CMS</abbr> has opened, we need to ensure the
+              content is available to our Next.js application in both terms of
+              permissions and actual content existing on the database.
+            </p>
+
+            <ol class="nunjucks-list">
+              <li>
+                &nbsp;Create a local account at
+                <code>http://localhost:1337/admin</code>. Your administrator
+                credentials will be stored in the database.
+              </li>
+              <li>
+                &nbsp; Go to <strong>Content-Type Builder</strong> on the left
+                sidebar; create new <strong>Collection Type</strong>; its
+                display name should read "Article". After clicking Continue, add
+                the <strong>Fields</strong> Text (Short text): "title", and Rich
+                Text (Blocks): "content". Then click on <code>Save</code> for a
+                server restart.
+              </li>
+              <li>
+                &nbsp; Go to <code>Settings</code>; under
+                <code>Users &amp; Permissions Plugin</code> (bottom), click
+                <code>Roles</code>, then <code>Public</code>; on
+                <code>Article</code>, check the boxes for <code>find</code> and
+                <code>findOne</code>. Now <code>Save</code> again. We do this
+                instead of using a token.
+              </li>
+              <li>
+                &nbsp; Go to the <code>Content Manager</code>; select
+                <code>Article</code>; click <code>+ Create new entry</code>.
+                Enter data on the fields and lastly <code>Publish</code>.
+              </li>
+            </ol>
+            <p>
+              For a simple test like this, we shall ignore using an
+              <abbr>API</abbr> token. In case one needs to fetch data that is
+              not entirely open to the public (like it instead happens with a
+              public blog), or is more comfortable with only the server having
+              access to the it, then consider simply including
+              <code>'Authorization': 'Bearer {TOKEN}'</code> in your
+              <code>fetch</code> headers and having that in your environment
+              variables.
+            </p>
+            <p>
+              The <code>getArticles</code> function fetches data from the Strapi
+              <abbr>API</abbr>. It uses <code>isomorphic-dompurify</code> to
+              sanitize the <abbr>HTML</abbr> content coming from the CMS. This
+              is a vital security step to prevent <abbr>XSS</abbr> attacks.
+            </p>
+            <p>
+              One thing to note is that the "Blocks" format from strapi gives an
+              array, while <code>DOMPurify</code> expects a string. The function
+              to handle this only accounts for titles and normal paragraphs (one
+              can add these in the Strapi <code>Content Manager</code>.
+            </p>
+            <h3>Rendering content</h3>
+            <p>
+              The Nunjucks template then uses the <code>safe</code> filter to
+              <strong>render</strong> the <strong>sanitized</strong> HTML.
+            </p>
+            <div class="filepath"><code>templates/articles.njk</code></div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-nunjucks">&lt;h2&gt;Articles from CMS&lt;/h2&gt;
+{% if articles.length &gt; 0 %}
+  &lt;div&gt;
+    {% for article in articles %}
+      &lt;article&gt;
+        &lt;h3&gt;{{ article.title }}&lt;/h3&gt;
+        &lt;p&gt;Published: {{ article.publishedAt | formatDate }}&lt;/p&gt;
+        &lt;div&gt;{{ article.content | safe }}&lt;/div&gt;
+      &lt;/article&gt;
+    {% endfor %}
+  &lt;/div&gt;
+{% else %}
+  &lt;p&gt;No articles available at this time.&lt;/p&gt;
+{% endif %}</code></pre>
+            <div class="filepath"><code>app/articles/page.js</code></div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-javascript">import { renderNunjucks } from '@/lib/nunjucks';
+import DOMPurify from 'isomorphic-dompurify';
+
+export const revalidate = 60; // Every 60 seconds
+
+// Convert Strapi JSON Blocks to HTML strings
+function renderBlocks(blocks) {
+  if (!Array.isArray(blocks)) return '';
+  
+  return blocks.map(block =&gt; {
+    // Handle Paragraphs
+    if (block.type === 'paragraph') {
+      const text = block.children.map(child =&gt; child.text).join('');
+      return `&lt;p&gt;${text}&lt;/p&gt;`;
+    }
+    // Handle Headings
+    if (block.type === 'heading') {
+      const text = block.children.map(child =&gt; child.text).join('');
+      return `&lt;h${block.level}&gt;${text}&lt;/h${block.level}&gt;`;
+    }
+    // Add more handlers for images, lists, etc.
+    return '';
+  }).join('');
+}
+
+async function getArticles() {
+  const strapiUrl = process.env.STRAPI_API_URL;
+
+  try {
+    const response = await fetch(`${strapiUrl}/api/articles`);
+
+    if (!response.ok) throw new Error('Failed to fetch articles from CMS');
+
+    const { data: articles = [] } = await response.json();
+
+    // Sanitize content before rendering
+    return articles.map(article =&gt; ({
+      ...article,
+      content: DOMPurify.sanitize(renderBlocks(article.content) || ''),
+      title: DOMPurify.sanitize(article.title || ''),
+    }));
+  } catch (error) {
+    console.error('Error fetching articles:', error);
+
+    return [];
+  }
+}
+
+export default async function ArticlesPage() {
+  const articles = await getArticles(); // Finally sanitized
+  const html = renderNunjucks('articles.njk', { articles });
+
+  return &lt;div dangerouslySetInnerHTML={{ __html: html }} /&gt;;
+}</code></pre>
+          </section>
+          <hr />
+          <section id="nextjs-client-page" class="nunjucks-section">
+            <h2>Client Page (Dashboard)</h2>
+            <p>
+              For highly dynamic or user-specific pages, client-side rendering
+              is the best approach. By placing the <code>'use client'</code>
+              directive at the top of the file it executes in the browser.
+            </p>
+            <p>
+              This dashboard page does not use Nunjucks. Instead, it behaves
+              like a standard React component, using the
+              <code>useState</code> and <code>useEffect</code> hooks to fetch
+              and display user data.
+            </p>
+            <p>
+              This demonstrates how one could seamlessly mix server-rendered
+              Nunjucks pages and client-rendered React pages in the same
+              application.
+            </p>
+            <div class="filepath"><code>app/dashboard/page.js</code></div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-javascript">'use client';
+
+import { useState, useEffect } from 'react';
+
+export default function Dashboard() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() =&gt; {
+    async function fetchUser() {
+      try {
+        // Simulate API call
+        await new Promise(resolve =&gt; setTimeout(resolve, 1000));
+        setUser({
+          name: 'Yours Truly',
+          email: 'my@real.email',
+          joined: new Date().toLocaleDateString(),
+        });
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchUser();
+  }, []);
+
+  if (loading) return &lt;p&gt;Loading dashboard...&lt;/p&gt;;
+  if (error) return &lt;p&gt;Error: {error}&lt;/p&gt;;
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Dashboard&lt;/h2&gt;
+      &lt;div&gt;
+        &lt;h3&gt;Welcome, {user.name}!&lt;/h3&gt;
+        &lt;p&gt;
+          &lt;strong&gt;Email&lt;/strong&gt;: {user.email}
+        &lt;/p&gt;
+        &lt;p&gt;
+          &lt;strong&gt;Member since&lt;/strong&gt;: {user.joined}
+        &lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+          </section>
+          <hr />
+          <section id="nextjs-running" class="nunjucks-section">
+            <h2>Running the Project</h2>
+            <p>
+              To start the development server from the project's root directory:
+            </p>
+            <pre><code class="language-bash">npm install
+npm run dev</code></pre>
+            <p>
+              The different pages to see the results of each rendering strategy
+              (all accessible via links):
+            </p>
+            <ul class="nunjucks-list">
+              <li>
+                &nbsp;<code>http://localhost:3000</code>: Server-rendered home
+                page.
+              </li>
+              <li>
+                &nbsp;<code>http://localhost:3000/products</code>: Statically
+                generated page with products from a JSON file.
+              </li>
+              <li>
+                &nbsp;<code>http://localhost:3000/articles</code>:
+                Server-rendered page fetching content from Strapi
+                <abbr>CMS</abbr>.
+              </li>
+              <li>
+                &nbsp;<code>http://localhost:3000/dashboard</code>:
+                Client-rendered page fetching user-specific data.
+              </li>
+            </ul>
+          </section>
+          <div class="outro-wrapper">
+            <section id="outro" class="outro">
+              <h2>Explore more of my work!</h2>
+              <svg
+                class="curbparator top"
+                viewBox="0 0 100 10"
+                preserveAspectRatio="none"
+              >
+                <path fill="none" d="M 0,0 Q 50,15 100,0" />
+              </svg>
+              <p>
+                It is my hope that this concise introduction to the subject
+                matter has proven beneficial.
+              </p>
+              <p>Be welcomed to share with developer friends.</p>
+              <svg
+                class="curbparator bottom"
+                viewBox="0 0 100 10"
+                preserveAspectRatio="none"
+              >
+                <path fill="none" d="M 0,10 Q 50,-5 100,10" />
+              </svg>
+              <div>
+                <a
+                  href="https://github.com/EFrMG"
+                  target="_blank"
+                  class="outro-link-button"
+                >
+                  <i class="shadow-animation"></i
+                  ><span class="shadow-text">Portfolio</span
+                  ><i class="shadow-animation"></i>
+                </a>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

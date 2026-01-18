@@ -1,0 +1,160 @@
+.sidebar {
+  padding: var(--spacing-m);
+  overflow-y: auto;
+  background-color: var(--bkg-150);
+  border-radius: var(--border-radius);
+  color: var(--primary-600);
+  transition:
+    color var(--trs-s),
+    background-color var(--trs-theme);
+}
+
+.sidebar .platforms .first {
+  text-align: center;
+
+  & a {
+    margin-inline: auto;
+  }
+}
+
+.sidebar .platform {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.platform-docs {
+  width: 100%;
+}
+
+.sidebar .platform:not(:last-child) {
+  border-bottom: 2px solid var(--bkg-100);
+  padding-bottom: var(--spacing-m);
+  margin-bottom: var(--spacing-m);
+}
+
+.sidebar .platform-name {
+  font-size: var(--fz-h2);
+  margin-block: var(--spacing-s);
+  text-align: center;
+  cursor: default;
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar nav a {
+  display: block;
+  max-width: 50vw;
+  padding: var(--spacing-s);
+  border-radius: var(--border-radius);
+  transition:
+    background-color var(--trs-xs) var(--del-s),
+    color var(--trs-s),
+    box-shadow var(--trs-xs) var(--del-s),
+    translate var(--trs-xs) var(--del-s);
+}
+
+.sidebar nav a:hover {
+  background-color: var(--bkg-200);
+  box-shadow:
+    1px 2px 0px 2px var(--primary-box-shadow),
+    0 0 9px 1px var(--primary-100);
+  translate: -1px -2px;
+}
+
+.sidebar nav a:active {
+  box-shadow: none;
+  translate: 0 0;
+}
+
+.sidebar a.active {
+  color: var(--text);
+  font-weight: var(--fw-bold);
+}
+
+.sidebar-button {
+  display: none;
+  justify-content: end;
+  position: absolute;
+  width: calc(100% - var(--spacing-m) * 2);
+  max-height: 2.25lh;
+  height: var(--sidebar-width--height);
+  border-radius: var(--border-radius);
+}
+
+/* From Uiverse.io by JulanDeAlb */
+.hamburger-check {
+  width: 2lh;
+  height: 2lh;
+  margin: 0.15lh var(--spacing-m) 0 0;
+  padding: 0;
+  cursor: pointer;
+  display: block;
+
+  & input {
+    display: none;
+  }
+
+  & svg {
+    height: 2lh;
+    /* Define the transition for transforming the SVG */
+    transition: transform var(--trs-in);
+  }
+
+  & input:checked + svg {
+    transform: rotate(-45deg);
+  }
+
+  & input:checked + svg .hamburger-line-top-bottom {
+    stroke-dasharray: 20 300;
+    stroke-dashoffset: -32.42;
+  }
+}
+
+.hamburger-line {
+  fill: none;
+  stroke: white;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+  transition:
+    stroke-dasharray var(--trs-in),
+    stroke-dashoffset var(--trs-in);
+}
+
+.hamburger-line-top-bottom {
+  stroke-dasharray: 12 63;
+}
+
+@media screen and (max-width: 900px) {
+  .sidebar {
+    text-align: center;
+
+    & > *:not(h1) {
+      display: none;
+    }
+  }
+
+  .main-grid:has(.sidebar-button[aria-expanded="true"]) .sidebar > *:not(h1) {
+    display: block;
+  }
+
+  .main-grid {
+    --sidebar-width--height: 2.25lh;
+    grid-template-columns: unset;
+    grid-template-rows: var(--sidebar-width--height) 1fr;
+  }
+
+  .sidebar-button {
+    display: flex;
+  }
+
+  .platform-docs {
+    width: unset;
+  }
+}

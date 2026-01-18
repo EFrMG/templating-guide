@@ -1,0 +1,15 @@
+@font-face {
+  font-family: "JetBrains Mono";
+  src: ("../fonts/JetBrainsMono-Regular.woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: ("../fonts/JetBrainsMono-Medium.woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 600;
+}
