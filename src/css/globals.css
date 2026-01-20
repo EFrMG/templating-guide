@@ -67,6 +67,40 @@
 
   /* Delays */
   --del-s: 140ms;
+
+  @media only screen and (max-width: 550px) {
+    /* Typography */
+    --fz-h1: 1.25rem;
+    --fz-h2: 1.4375rem;
+    --fz-h3: 1rem;
+    --fz-filepath: 0.875rem;
+    --fz-base: 0.875rem;
+    --fz-s: 0.6875rem;
+    /* Spacing */
+    --spacing-xs: 0.125rem;
+    --spacing-s: 0.3125rem;
+    --spacing-m: 0.6875rem;
+    --spacing-ml: 1rem;
+    --spacing-l: 1.375rem;
+    --spacing-xl: 2rem;
+  }
+
+  @media only screen and (max-width: 350px) {
+    /* Typography */
+    --fz-h1: 0.9375rem;
+    --fz-h2: 1.0625rem;
+    --fz-h3: 0.75rem;
+    --fz-filepath: 0.625;
+    --fz-base: 0.625rem;
+    --fz-s: 0.5rem;
+    /* Spacing */
+    --spacing-xs: 0.125rem;
+    --spacing-s: 0.25rem;
+    --spacing-m: 0.5rem;
+    --spacing-ml: 0.75rem;
+    --spacing-l: 1rem;
+    --spacing-xl: 1.5rem;
+  }
 }
 
 .nunjucks-theme {

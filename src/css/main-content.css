@@ -269,6 +269,18 @@ a[href="https://strapi.io/"]::before {
   &.bottom {
     margin-block-start: var(--spacing-m);
   }
+
+  @media only screen and (max-width: 500px) {
+    height: 10px;
+
+    &.top {
+      margin-block-start: var(--spacing-s);
+    }
+
+    &.bottom {
+      margin-block-end: var(--spacing-m);
+    }
+  }
 }
 
 .code-language-label {
