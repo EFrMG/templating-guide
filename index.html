@@ -135,15 +135,15 @@
           <section id="introduction">
             <h2 class="first">Welcome to the Templating Guide</h2>
             <p>
-              We'll explore how to use Handlebars and Nunjucks in various
+              Here we'll explore how to use Handlebars and Nunjucks in various
               environments: Ghost, Metalsmith, Eleventy, and Next.js. This guide
               covers how to create reusable templates, manage data and even
               extend the functionality of these engines to fit specific needs.
             </p>
             <p>
               It is quite a common occurrence in programming that one needs to
-              maintain a structure in code, while changing content found inside
-              it.
+              maintain a structure in code, while changing content found
+              throughout it.
             </p>
             <p>
               Imagine one has a recipe for a nice cake. A template is akin to
@@ -165,7 +165,7 @@
               retrieving <span class="underscores-color">content</span> from
               various sources (such as a database or
               <code>.<abbr>md</abbr></code> files for blog posts) and
-              integrating it into the <abbr>HTML</abbr> structure.
+              integrating it into the HTML structure.
             </p>
             <p>
               Fundamentally, this process involves:
@@ -193,10 +193,9 @@
               headless with an <abbr>SSG</abbr>.
             </p>
             <p>
-              Should the reader require a general overview of
-              <abbr>SSG</abbr>s without the particularities of Ghost, please
-              navigate to the other platform sections via the sidebar. The
-              decision to commence with
+              Should the reader require a general overview of SSGs without the
+              particularities of Ghost, please navigate to the other platform
+              sections via the sidebar. The decision to commence with
               <a href="https://docs.ghost.org/introduction">Ghost</a> stems from
               its relative flexibility and comprehensive feature set concerning
               custom Handlebars helpers, even if it could be considered
@@ -234,10 +233,10 @@
                 regardless.
               </li>
               <li>
-                <code>default.hbs</code>: The main layout file. The frame for
-                the entire site (header, main, footer, etcetera). One
-                <em>could</em> just use <code>index.hbs</code> for this, as the
-                concept is similar.
+                <code>default.hbs</code>: The <strong>main layout file</strong>.
+                The frame for the entire site (header, main, footer, etcetera).
+                One <em>could</em> just use <code>index.hbs</code> for this, as
+                the concept is similar.
               </li>
               <li>&nbsp;<code>post.hbs</code>: Displays a single post.</li>
             </ul>
@@ -251,7 +250,9 @@
             </p>
             <p>
               Ghost supplies the
-              <span class="underscores-color">data</span> while as Handlebars
+              <span class="underscores-color">data</span> from its own database
+              edited through its web <abbr>UI</abbr> at
+              <code>https://WEBSITE_URL/ghost</code>, while as Handlebars
               renders it in the expression's place.
             </p>
             <p>
@@ -329,7 +330,7 @@
                 <code>&lt;p&gt;&lt;/p&gt;</code> tags, thereby including
                 paragraph breaks on newlines. It could even include a
                 <abbr>CTA</abbr> to sign up or upgrade for determinate users if
-                configuration is set for users with restricted access.
+                configuration is set for restricted and&sol;or limited access.
               </li>
               <li>
                 <code>{{excerpt}}</code>: Provides a shortened version of the
@@ -341,7 +342,8 @@
               </li>
               <li>
                 <code>{{tags}}</code>: Presents a literal list of tags
-                associated with the post, which may be iterated through.
+                associated with the post (e.g., news, technology,
+                entertainment), which may be iterated through.
               </li>
             </ul>
           </section>
@@ -408,8 +410,11 @@
               The technically correct way to access this
               <span class="underscores-color">data</span> would be to write:
               <code>{{post.title}}</code>, <code>{{post.content}}</code>, etc.,
-              even if it works either way. I do suggest to follow the
-              documentation and access the <code>post</code> context within a
+              even if it works either way.
+            </p>
+            <p>
+              I do suggest to follow the documentation and access the
+              <code>post</code> context within a
               <code>{{#post}}...{{/post}}</code> block.
             </p>
             <pre><code>{{#post}}
@@ -421,7 +426,7 @@
               Just as when at the <code>index</code> context we have a list of
               posts to loop through with the use of the
               <code>{{#foreach}}</code> helper, the <code>post</code> context
-              provides a more particular context.
+              provides a more particular one.
             </p>
             <p>
               What if we are on any other page, such as
@@ -436,8 +441,8 @@
             </p>
             <p>
               For example, one could fetch the three most recent posts
-              associated with a specific tag from any location within the theme
-              (any files).
+              associated with a specific tag from any
+              <code>.<abbr>hbs</abbr></code> file within the theme.
             </p>
             <pre><code>{{#get "posts" filter="tags:specific-tag" limit="3"}}
   {{#foreach posts}}
@@ -457,7 +462,7 @@
   {{!-- Do a barrel roll! (Z or R twice) --}}
 {{/if}}</code></pre>
             <p>
-              <code>{{feature_image}}</code> is part of the
+              Keeping in mind that <code>{{feature_image}}</code> is part of the
               <span class="underscores-color">data</span> Ghost provides within
               the <code>post</code> context.
             </p>
@@ -477,14 +482,15 @@
             </p>
             <p>
               An alternative approach involves employing a script with its type
-              attribute set to "application/json", containing
+              attribute set to <code>"application/json"</code>, containing
               <span class="underscores-color">data</span> fetched from the Ghost
               admin via helpers. This data can then be parsed by a
               <abbr>JS</abbr>
               script to programmatically create elements and assign their
-              <code>textContent</code>, with organization facilitated by tags.
-              As previously mentioned, these posts accommodate two text inputs:
-              title and content.
+              <code>textContent</code>, with organization facilitated by
+              <code>tags</code>. As previously mentioned, these posts
+              accommodate only two text inputs: title and content; therefore, we
+              would at most have two fields per tag.
             </p>
             <p>
               Here, we construct a <abbr>JSON</abbr> array of objects for each
@@ -512,15 +518,16 @@
 {{/get}}</code></pre>
             <p>
               Observe how the <code>{{#unless}}</code> helper facilitates the
-              proper comma separation of each object, resulting in valid
-              <abbr>JSON</abbr>. The array of tags is delimited the same.
+              proper comma separation of each object, resulting in valid JSON.
+              The array of tags is delimited the same.
             </p>
             <p>
               Regarding the <code>{{slug}}</code> helper, it is used to output a
               <abbr>URL</abbr>-safe version of the tags. One could also use
               <code>{{name}}</code> to retrieve the tag precisely as entered in
               the Ghost admin panel irrespective of URL-friendliness, or even
-              <code>{{url}}</code>, which is even less suitable in this example.
+              <code>{{url}}</code>, which is still less suitable in this
+              example.
             </p>
             <pre><code>const dataElement = document.getElementById("post-data");
 const postData = JSON.parse(dataElement.textContent);
@@ -536,8 +543,8 @@ postData.forEach((post) =&gt; {
   document.body.appendChild(divElement);
 });</code></pre>
             <p>
-              It is noteworthy that <code>tags</code> significantly contribute
-              to customization here.
+              It is noteworthy that <code>tags</code> are what makes
+              customization possible here.
             </p>
           </section>
           <hr />
@@ -556,7 +563,7 @@ postData.forEach((post) =&gt; {
                 <abbr>HTML</abbr> for pagination links, which are customizable
                 in <code>pagination.hbs</code>. This implies one would limit the
                 ammount of posts shown per page and be within the
-                <code>post</code> context. It does not work using the
+                <code>post</code> context. It does not work when using the
                 <code>{{#get}}</code> helper (in my experience).
               </li>
               <li>
@@ -616,13 +623,32 @@ postData.forEach((post) =&gt; {
               post meta-information (e.g., author, date, tags).
             </p>
             <p>
-              To implement, one could create a file within the
-              <code>partials/</code> directory
-              (<code>/partials/post-card.hbs</code>) and subsequently
-              incorporate it into another template using the following syntax:
+              To implement, one could create a template file within the
+              <code>partials/</code> directory and subsequently incorporate it
+              into another template using the following syntax:
             </p>
-            <pre><code>{{&gt; "post-card"}}</code></pre>
+            <pre><code class="language-handlebars">{{&gt; "post-card"}}</code></pre>
+            <div class="filepath">
+              <code>/partials/post-card.hbs</code>
+            </div>
+            <pre
+              class="has-filepath-above"
+            ><code class="language-html">&lt;div class="card"&gt;
+  &lt;h2&gt;Hello from Somewhere&lt;/h2&gt;
+  &lt;p&gt;
+    The weather is great and the views are amazing.
+    Sending you a little postcard through the web.
+  &lt;/p&gt;
+  &lt;p class="signature"&gt;
+    &mdash; Yours Truly.
+  &lt;/p&gt;
+&lt;/div&gt;</code></pre>
           </section>
+          <p>
+            Templates not only are reusable pieces of HTML inside a Handlebars
+            file, as one could also use helpers inside them. I omit this in this
+            example.
+          </p>
           <hr />
           <section id="routing">
             <h2>Routing and Layouts</h2>
@@ -657,7 +683,7 @@ postData.forEach((post) =&gt; {
             <p>
               This configuration directs Ghost to render the
               <code>extra-page.hbs</code> template when a user navigates to the
-              <code>/easter-egg/</code> URL.
+              <code>/easter-egg</code> path.
             </p>
             <div class="filepath"><code>extra-page.hbs</code></div>
             <pre class="has-filepath-above"><code>{{!&lt; default}}
@@ -718,9 +744,10 @@ postData.forEach((post) =&gt; {
 &lt;/header&gt;
 </code></pre>
             <p>
-              Data helpers starting with <code>@</code> indicate "global
-              <span class="underscores-color">data</span>" is provided,
-              available anywhere within the theme.
+              Data helpers starting with <code>@</code> indicate
+              <strong>global</strong>
+              <span class="underscores-color">data</span> is provided, available
+              anywhere within the theme.
             </p>
             <div class="filepath"><code>partials/post-card.hbs</code></div>
             <pre
@@ -793,10 +820,6 @@ postData.forEach((post) =&gt; {
 &lt;/html&gt;
 </code></pre>
             <h3>Analysis of the Homepage Example</h3>
-            <p>
-              Let us dissect the interplay of the various components within our
-              homepage example.
-            </p>
             <ul class="moustache-list">
               <li>
                 <strong>Inclusion of Header and Footer:</strong> It incorporates
