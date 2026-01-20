@@ -203,12 +203,12 @@
             </p>
             <p class="has-border-under">
               The installation process will be omitted for brevity, just procure
-              the prerequisite programs, and correct version of
-              <a href="https://nodejs.org/">Node.js</a> of course. Do note that
-              building a Ghost instance does take a good amount of time; even to
-              start a development server is too lenghty a time for my liking.
-              There also is no <abbr>HMR</abbr>, having one to manually refresh
-              the page after file changes and rebuilds.
+              the prerequisite programs and correct version of
+              <a href="https://nodejs.org/">Node.js</a>. Do note that building a
+              Ghost instance does take a good amount of time; even to start a
+              development server is too lenghty a time for my liking. There also
+              is no <abbr>HMR</abbr>, having one to manually refresh the page
+              after file changes and rebuilds.
             </p>
             <p>
               Templating proves ideal for a <abbr>CMS</abbr>
@@ -655,7 +655,7 @@ postData.forEach((post) =&gt; {
             <p>
               In Ghost, the <code>default.hbs</code> file functions as the
               primary template for one's site. It typically incorporates the
-              header, footer, and other elements common to all pages. The
+              header, footer and other elements common to all pages. The
               <code>{{{body}}}</code> helper serves as a specialized placeholder
               that instructs Ghost where to inject the content of the
               <strong>current page</strong>.
@@ -852,9 +852,9 @@ postData.forEach((post) =&gt; {
               philosophy: <strong>every component is a plugin</strong>.
             </p>
             <p>
-              Unlike other <abbr>SSG</abbr>s that offer a fixed set of features,
-              Metalsmith provides a minimalist framework, delegating further
-              functionality to the plugin ecosystem.
+              Unlike other SSGs that offer a fixed set of features, Metalsmith
+              provides a minimalist framework, delegating further functionality
+              to its plugin ecosystem.
             </p>
             <h3>The Core Pipeline</h3>
             <p>Metalsmith operates on a fundamental, three-step pipeline.</p>
@@ -881,9 +881,9 @@ postData.forEach((post) =&gt; {
             <p>
               Metadata is handled in quite neat a manner in our upcoming
               examples: when Metalsmith processes a file, it parses any
-              front-matter (e.g., YAML at the apex of a Markdown file) and
-              exposes it as an associated metadata object. This metadata is then
-              propagated through the plugin chain.
+              front-matter (id est, <abbr>YAML</abbr> at the apex of a Markdown
+              file) and exposes it as an associated metadata object. This
+              metadata is then propagated through the plugin chain.
             </p>
             <p>
               For example, a Markdown plugin would read the raw content of a
@@ -918,17 +918,16 @@ postData.forEach((post) =&gt; {
             <pre><code class="language-bash">mkdir -p layouts src/posts</code></pre>
             <ul class="moustache-list">
               <li>
-                <code>build/</code>: This is the destination for the built site.
-                It's created automatically by Metalsmith and contains the final
+                <code>build/</code>: The destination for the built site. It is
+                created by Metalsmith and contains the final
                 <abbr>HTML</abbr> files and any other assets.
               </li>
               <li>
-                <code>layouts/</code>: This directory holds Handlebars
-                templates; these define the structure and layout of different
-                pages.
+                <code>layouts/</code>: It holds Handlebars templates; these
+                define the structure and layout of different pages.
               </li>
               <li>
-                <code>src/</code>: This is the source directory for the content.
+                <code>src/</code>: The source directory for the content.
                 Metalsmith reads all files from here to begin the build process.
               </li>
               <li>
@@ -953,12 +952,8 @@ handlebars \
 jstransformer-handlebars</code></pre>
             <p>Here is a concise overview of these packages.</p>
             <ul class="moustache-list">
-              <li>
-                <!----><code>metalsmith</code>: The core Metalsmith library.
-              </li>
-              <li>
-                <code>handlebars</code>: The Handlebars templating engine.
-              </li>
+              <li><!----><code>metalsmith</code>: Core Metalsmith library.</li>
+              <li><code>handlebars</code>: Handlebars templating engine.</li>
               <li>
                 <code>@metalsmith/collections</code>: Groups files together,
                 ideal for creating a list of blog posts.
@@ -972,7 +967,7 @@ jstransformer-handlebars</code></pre>
                 user-friendly <abbr>URL</abbr>s for your posts.
               </li>
               <li>
-                <code>@metalsmith/layouts</code>: A plugin to apply Handlebars
+                <code>@metalsmith/layouts</code>: Plugin to apply Handlebars
                 templates to a given content.
               </li>
               <li>
@@ -1068,14 +1063,14 @@ Metalsmith(__dirname)
             <p>
               With the build process in place, we shall create a simple blog.
               This involves creating content with metadata, defining layouts to
-              display that content, and using collections to create an index
-              page (for posts).
+              display that content and using collections to create an index page
+              (for posts).
             </p>
             <h3>Rich Metadata in Posts</h3>
             <p>
               Create a Markdown file for a blog post in <code>src/posts/</code>.
               Use <abbr>YAML</abbr> front-matter to add metadata such as title,
-              author, date, and the layout to use.
+              author, date and the layout to use.
             </p>
             <div class="filepath"><code>src/posts/first-post.md</code></div>
             <pre class="has-filepath-above"><code class="language-yaml">---
@@ -1165,14 +1160,14 @@ Welcome to my new blog!
               how practical templating is on itself.
             </p>
             <p>
-              One could test it from <code>build/</code> using a development
-              server like
+              One could test it from the <code>build/</code> directory using a
+              development server like
               <a href="https://www.npmjs.com/package/live-server">live-server</a
               >.
             </p>
             <p>
               All that would be left to do is create better layouts and add
-              classes. That part escapes the scope of this documentation.
+              classes; that part escapes the scope of this documentation.
             </p>
           </section>
           <hr />
@@ -1287,16 +1282,16 @@ Metalsmith(__dirname)
             <h2>Templating with Eleventy</h2>
             <p>
               <a href="https://www.11ty.dev/" target="_blank">Eleventy</a>, or
-              <b>11ty</b>, is a modern static site generator that is designed to
-              be simple and flexible. It supports over ten different templating
+              <b>11ty</b>, is a modern static site generator designed to be
+              simple and flexible. It supports over ten different templating
               languages, including Handlebars and Nunjucks.
             </p>
             <p>
               Its core philosophy is centered around the idea of
-              "<em>zero-config</em>" to get started, yet it provides a rich set
-              of features for more complex projects. Eleventy works by
-              transforming a directory of templates into a ready-to-deploy
-              static website; this being similar to how Metalsmith works.
+              <em>zero-config</em> to get started, yet it provides a rich set of
+              features for more complex projects. Eleventy works by transforming
+              a directory of templates into a ready-to-deploy static website
+              directory; this being similar to how Metalsmith functions.
             </p>
             <h3>Key Features of Eleventy</h3>
             <ul class="moustache-list">
@@ -1307,12 +1302,12 @@ Metalsmith(__dirname)
               </li>
               <li>
                 <strong>Extensibility:</strong> With a mature plugin ecosystem,
-                one can add features like image optimization, RSS feeds, and
+                one can add features like image optimization, RSS feeds and
                 more.
               </li>
               <li>
                 <strong>Data-Driven:</strong> Eleventy's data cascade allows you
-                to pull data from various sources (JSON, JS, front matter) and
+                to pull data from various sources (JSON, JS, front-matter) and
                 make it available to your templates.
               </li>
             </ul>
@@ -1349,7 +1344,7 @@ Metalsmith(__dirname)
               </li>
               <li>
                 <code>_includes/</code>: This is where to store reusable
-                template partials, like headers, footers, and layouts.
+                template partials, like headers, footers and layouts.
               </li>
               <li>
                 <code>posts/</code>: A content directory for blog posts,
@@ -1361,7 +1356,7 @@ Metalsmith(__dirname)
               </li>
               <li>
                 <code>eleventy.config.js</code>: The configuration file for
-                Eleventy, where one can customize settings, add plugins, and
+                Eleventy, where one can customize settings, add plugins and
                 define custom filters and shortcodes.
               </li>
             </ul>
@@ -1515,7 +1510,7 @@ posts/first-post.md</code></pre>
             <p>
               We edit the configuration file at the root of the project. This
               file will define a custom shortcode to display the current year
-              which we will use in our base layout, and define the templating
+              which we will use in our base layout and define the templating
               engines.
             </p>
             <div class="filepath">
@@ -1541,7 +1536,7 @@ posts/first-post.md</code></pre>
             <p>
               Let's create a new base layout at
               <code>_includes/base.njk</code> that includes blocks for the
-              title, content, and scripts.
+              title, content and scripts.
             </p>
             <div class="filepath">
               <code>_includes/base.njk</code>
@@ -1596,7 +1591,7 @@ posts/first-post.md</code></pre>
           <section id="eleventy-markdown-nunjucks" class="nunjucks-section">
             <h2>The Markdown and Nunjucks Workflow</h2>
             <p>
-              Here is where Eleventy's flexibility truly shines! By using
+              Here is where Eleventy's flexibility truly shows! By using
               Nunjucks for our layouts (<code>.njk</code> files), we can handle
               all the structural <abbr>HTML</abbr>, logic and templating in one
               place. Simultaneously, we can use Markdown (<code>.md</code>
@@ -1605,10 +1600,10 @@ posts/first-post.md</code></pre>
             <p>
               This separation of concerns is incredibly effective. It allows
               content creators to focus solely on writing without needing to
-              worry about the complexities of <abbr>HTML</abbr> and templating.
-              Meanwhile, developers can build and maintain the site's structure
-              and design in the Nunjucks layouts, knowing that the content will
-              be slotted in correctly.
+              worry about the complexities of HTML and templating. Meanwhile,
+              developers can build and maintain the site's structure and design
+              in the Nunjucks layouts, knowing that the content will be slotted
+              in correctly.
             </p>
             <h3>Creating Content and the Index Page</h3>
             <p>
@@ -1789,7 +1784,7 @@ module.exports = function(eleventyConfig) {
             <p>
               First, create a new Next.js application using the command-line
               interface, then navigate into the new directory and install the
-              packages we'll need for Nunjucks templating, date formatting, and
+              packages we'll need for Nunjucks templating, date formatting and
               HTML sanitization.
             </p>
             <p>
@@ -1836,7 +1831,7 @@ chokidar</code></pre>
             <p>
               Finally, create a <code>.env.local</code> file in the root of your
               project to store environment variables, such as the
-              <abbr>API</abbr> <abbr>URL</abbr> and token, and any URLs that
+              <abbr>API</abbr> <abbr>URL</abbr> and token and any URLs that
               should not be hard-coded.
             </p>
             <div class="filepath"><code>.env.local</code></div>
@@ -2072,7 +2067,7 @@ async function getProducts() {
     return JSON.parse(jsonData);
   } catch (error) {
     console.error('Could not read products data:', error);
-    return []; // Return an empty array on error
+    return [];
   }
 }
 
@@ -2160,7 +2155,7 @@ npm run develop</code></pre>
               One thing to note is that the "Blocks" format from strapi gives an
               array, while <code>DOMPurify</code> expects a string. The function
               to handle this only accounts for titles and normal paragraphs (one
-              can add these in the Strapi <code>Content Manager</code>.
+              can add these in the Strapi web interface).
             </p>
             <h3>Rendering content</h3>
             <p>
