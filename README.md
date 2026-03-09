@@ -1,5 +1,7 @@
 # Guide to Handlebars and Nunjucks Templating
 
+![presentation-card](https://github.com/user-attachments/assets/8155a78b-91f7-48de-ab44-80590b3a0632)
+
 ## Brief
 
 Introduction and orientation for templating with Ghost, Metalsmith, Eleventy, and Next.js + Strapi.
