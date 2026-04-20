@@ -1309,14 +1309,14 @@ Metalsmith(__dirname)
             <div class="filepath"><code>layouts/index.hbs</code></div>
             <pre
               class="has-filepath-above"
-            ><code class="language-handlebars">{!-- ... --}
+            ><code class="language-handlebars">{{!-- ... --}}
 {{#each collections.posts}}
   &lt;article&gt;
     &lt;h2&gt;&lt;a href="/{{ this.permalink }}/"&gt;{{ this.title }}&lt;/a&gt;&lt;/h2&gt;
     &lt;p&gt;{{ this.excerpt }}&lt;/p&gt;
   &lt;/article&gt;
 {{/each}}
-{!-- ... --}</code></pre>
+{{!-- ... --}}</code></pre>
           </section>
           <hr />
           <section id="eleventy-introduction">
