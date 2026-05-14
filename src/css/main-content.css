@@ -249,9 +249,12 @@ a[href="https://strapi.io/"]::before {
   }
 
   & p {
-    color: var(--text-dim);
     max-width: 80%;
     margin-inline: auto;
+
+    &:last-of-type {
+      color: var(--text-dim);
+    }
   }
 }
 

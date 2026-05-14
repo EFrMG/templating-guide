@@ -12,10 +12,12 @@
   --accent: hsl(35, 30%, 19%);
   --accent-light: hsl(35, 30%, 30%);
 
-  --text: hsl(35, 10%, 93%);
-  --text-dim: hsla(35, 10%, 93%, 0.7);
-  --text-dimer: hsla(35, 10%, 93%, 0.55);
+  --text: hsl(35, 10%, 85%);
+  --text-title: hsl(35, 10%, 93%);
+  --text-dim: hsla(35, 10%, 85%, 0.7);
+  --text-dimer: hsla(35, 10%, 85%, 0.55);
   --text-inverse: hsl(23, 20%, 12%);
+  --text-highlight: hsl(35, 10%, 96%);
   --clr-single-code: #efa6a2;
 
   --bkg-100: hsl(23, 20%, 10%);
@@ -116,9 +118,11 @@
   --accent: hsl(104, 28%, 19%);
   --accent-light: hsl(104, 28%, 30%);
 
-  --text: hsl(104, 10%, 91%);
-  --text-dim: hsla(104, 10%, 91%, 0.7);
+  --text: hsl(104, 10%, 83%);
+  --text-title: hsl(104, 10%, 92%);
+  --text-dim: hsla(104, 10%, 83%, 0.7);
   --text-inverse: hsl(120, 20%, 12%);
+  --text-highlight: hsl(104, 10%, 95%);
 
   --clr-single-code: #a2efa6;
 
@@ -165,8 +169,8 @@ body {
 }
 
 ::selection {
-  background-color: var(--bkg-500);
-  color: var(--text-inverse);
+  background-color: color-mix(var(--bkg-500) 33%, transparent 67%);
+  color: var(--text-highlight);
 }
 
 h1,
@@ -179,6 +183,7 @@ h6 {
   font-weight: var(--fw-bold);
   line-height: var(--lh-heading);
   margin: 0;
+  color: var(--text-title);
 }
 
 h1 {

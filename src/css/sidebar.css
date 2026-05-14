@@ -1,5 +1,5 @@
 .sidebar {
-  padding: var(--spacing-m);
+  padding: var(--spacing-l) var(--spacing-m) var(--spacing-m);
   overflow-y: auto;
   background-color: var(--bkg-150);
   border-radius: var(--border-radius);
