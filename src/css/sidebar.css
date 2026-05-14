@@ -53,7 +53,7 @@
   padding: var(--spacing-s);
   border-radius: var(--border-radius);
   transition:
-    background-color var(--trs-xs) var(--del-s),
+    background-color var(--trs-xs),
     color var(--trs-s),
     box-shadow var(--trs-xs) var(--del-s),
     translate var(--trs-xs) var(--del-s);

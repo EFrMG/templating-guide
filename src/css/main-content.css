@@ -48,6 +48,33 @@ abbr {
   ) !important;
 }
 
+.hero-icons-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-l);
+  margin-block: var(--spacing-xl);
+  opacity: 0.88;
+  filter: opacity(94%) brightness(94%)
+    drop-shadow(6px 12px 2.5px hsla(0, 0%, 0%, 0.33));
+
+  & img {
+    width: 68px;
+    height: 68px;
+
+    @media screen and (width <= 1024px) {
+      width: 54px;
+      height: 54px;
+    }
+
+    @media screen and (width <= 768px) {
+      width: 42px;
+      height: 42px;
+    }
+  }
+}
+
 a[href="https://handlebarsjs.com/"],
 a[href="https://ghost.org/"],
 a[href="https://metalsmith.io/"],
