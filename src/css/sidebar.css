@@ -9,7 +9,7 @@
     background-color var(--trs-theme);
 }
 
-.sidebar .platforms .first {
+.sidebar .platforms .first-last {
   text-align: center;
 
   & a {

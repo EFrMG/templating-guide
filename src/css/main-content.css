@@ -11,7 +11,7 @@ h2:not(.platform-name) {
   font-size: var(--fz-h2);
   margin: var(--spacing-m) 0 0 var(--spacing-l);
 
-  &.first {
+  &.first-last {
     text-align: center;
   }
 }

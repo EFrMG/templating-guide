@@ -196,6 +196,7 @@ hr {
   border-width: 3px;
   border-radius: 100vw;
   margin-block: var(--spacing-xl);
+  opacity: 0.85;
 
   &.first {
     margin-block: var(--spacing-ml);
@@ -203,7 +204,7 @@ hr {
   }
 
   &.last {
-    margin-block: var(--spacing-m) var(--spacing-l);
+    margin-block: var(--spacing-ml) var(--spacing-xl);
     opacity: 0.33;
   }
 }
