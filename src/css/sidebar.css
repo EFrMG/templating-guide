@@ -134,16 +134,21 @@
 
 @media screen and (max-width: 900px) {
   .sidebar {
-    text-align: center;
-    padding: var(--spacing-m);
     position: absolute;
     width: calc(100% - var(--spacing-m) * 2);
     height: var(--sidebar-width--height);
+    padding: var(--spacing-m);
+    border-radius: var(--border-radius-small);
+    text-align: center;
     z-index: 10;
 
     & > *:not(h1) {
       display: none;
     }
+  }
+
+  .main-grid:has(#hamburger-check:checked) .sidebar {
+    border-bottom: var(--spacing-m) solid var(--bkg-100);
   }
 
   .main-grid:has(.sidebar-button[aria-expanded="true"]) .sidebar > *:not(h1) {
@@ -167,5 +172,11 @@
 
   .main-content {
     grid-row: 2;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .hamburger-check {
+    margin: 0.1lh var(--spacing-l) 0 0;
   }
 }
