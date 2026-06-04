@@ -267,7 +267,7 @@ pre code {
   display: grid;
   grid-template-columns: var(--sidebar-width--height) 1fr;
   gap: var(--spacing-m);
-  padding: var(--spacing-m);
+  padding: var(--spacing-m) 0 var(--spacing-m) var(--spacing-m);
   height: 100vh;
   transition: grid-template-rows var(--trs-in);
 }
