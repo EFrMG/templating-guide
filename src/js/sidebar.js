@@ -13,7 +13,7 @@ sidebarLinks.forEach((link) => {
 
     if (targetElement) {
       targetElement.scrollIntoView({
-        behavior: "auto",
+        behavior: "smooth",
       });
 
       // Hide the burger menu as well to facilitate UX
