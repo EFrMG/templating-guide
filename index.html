@@ -1835,7 +1835,7 @@ module.exports = function(eleventyConfig) {
               logic from your React components.
             </p>
             <p>
-              In this guide, we will build a small site that demonstrates
+              In this section, we will build a small site that demonstrates
               several key data-fetching strategies within Next.js, all while
               using Nunjucks to render the final HTML.
             </p>
@@ -2252,7 +2252,7 @@ export const revalidate = 60; // Every 60 seconds
 // Convert Strapi JSON Blocks to HTML strings
 function renderBlocks(blocks) {
   if (!Array.isArray(blocks)) return '';
-  
+
   return blocks.map(block =&gt; {
     // Handle Paragraphs
     if (block.type === 'paragraph') {
