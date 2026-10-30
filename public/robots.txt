@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://efrmg.github.io/templating-guide/sitemap.xml
